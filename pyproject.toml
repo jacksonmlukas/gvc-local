@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gvc-local"
+version = "0.1.0"
+description = "Open-weight extension of GVC / Snap-GVC from ACL 2025 REALM paper (Pandian et al.)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Jackson Lukas", email = "jlukas3313@gmail.com" }]
+keywords = ["llm", "multi-agent", "reasoning", "vllm", "evaluation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "openai>=1.30",          # client speaks to any OpenAI-compatible endpoint incl. vLLM
+    "tiktoken>=0.7",
+    "pydantic>=2",
+    "chevron",               # Mustache templates, matches upstream
+    "python-dotenv",
+    "numpy",
+    "scipy",                 # bootstrap CIs
+    "pandas",
+    "tqdm",
+    "click",                 # CLI
+    # upstream code (when published)
+    # "rsallms @ git+https://github.com/Chrislai502/the_amazing_connections.git",
+]
+
+[project.optional-dependencies]
+dev = ["ruff>=0.5", "pytest>=8", "mypy>=1.8", "httpx>=0.27"]
+serving = [
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.29",
+    "httpx>=0.27",            # FastAPI TestClient transport
+]
+vllm = ["vllm>=0.6"]         # pinned only when you deploy the inference server
+rag = [
+    "sentence-transformers>=2.2",
+    "faiss-cpu>=1.7",          # swap to faiss-gpu if you have CUDA
+]
+finetune = [
+    "torch>=2.1",
+    "transformers>=4.40",
+    "peft>=0.10",
+    "trl>=0.8",
+    "bitsandbytes>=0.43",
+    "datasets>=2.18",
+    "accelerate>=0.30",
+    "scikit-learn>=1.4",
+    "wandb>=0.16",
+    "pyyaml>=6",
+    "flash-attn>=2.5; platform_system != 'Darwin'",
+]
+
+[project.scripts]
+gvc-local = "gvc_local.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

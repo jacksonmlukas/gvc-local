@@ -1,0 +1,45 @@
+# ──────────────────────────────────────────────────────────────────────
+# gvc-local  ·  Evaluation harness configuration
+# ──────────────────────────────────────────────────────────────────────
+# Usage:
+#   python scripts/run_eval.py --config configs/eval.yaml
+#
+# All keys here can be overridden by CLI flags.  CLI flags take
+# precedence when both are provided.
+# ──────────────────────────────────────────────────────────────────────
+
+# ── Benchmark ───────────────────────────────────────────────────────
+# "connections" (NYT Connections puzzles) or "gaia" (GAIA benchmark)
+benchmark: connections
+
+# ── Solver / model ──────────────────────────────────────────────────
+solver: basic                           # basic | cot | gvc | snap_gvc
+model: llama-3.1-8b                     # llama-3.1-8b | llama-3.3-70b | qwen-2.5-7b
+base_url: "http://localhost:8000/v1"    # vLLM OpenAI-compatible endpoint
+
+# ── Puzzle range (Connections) ──────────────────────────────────────
+puzzle_start: 0
+puzzle_end: 50
+
+# ── GAIA settings ───────────────────────────────────────────────────
+gaia:
+  level: 1                              # 1, 2, or 3 (paper targets level 1)
+  max_tasks: null                       # null = all tasks at this level
+  split: validation                     # validation (has answers) or test
+
+# ── Statistical settings ────────────────────────────────────────────
+n_bootstrap: 1000                       # bootstrap resamples for CIs
+per_stratum: 5                          # max samples per stratum in stratified sampling
+
+# ── Output ──────────────────────────────────────────────────────────
+output_path: "results/eval_results.jsonl"
+
+# ── Weights & Biases ────────────────────────────────────────────────
+wandb:
+  disabled: false                       # set true to skip W&B entirely
+  project: "gvc-local-eval"
+  entity: null                          # defaults to your W&B user
+  run_name: null                        # auto-generated if null
+  tags:
+    - gvc-local
+    - eval

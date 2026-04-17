@@ -1,0 +1,78 @@
+# ---------------------------------------------------------------------------
+# GVC-Local  --  vLLM + API compose stack
+#
+# Requires: Docker Compose v2, NVIDIA Container Toolkit (for GPU passthrough).
+#
+# Usage:
+#   docker compose up              # start both services
+#   docker compose up -d           # detached
+#   docker compose logs -f api     # follow API logs
+#   docker compose down            # tear down
+#
+# Override the model at launch:
+#   VLLM_MODEL=Qwen/Qwen2.5-7B-Instruct docker compose up
+# ---------------------------------------------------------------------------
+
+services:
+  # ---- vLLM inference server (GPU) ----------------------------------------
+  vllm:
+    image: nvidia/cuda:12.4.1-runtime-ubuntu22.04
+    command: >
+      bash -c "
+        pip install vllm &&
+        vllm serve ${VLLM_MODEL:-meta-llama/Meta-Llama-3.1-8B-Instruct}
+          --host 0.0.0.0
+          --port 8000
+          --tensor-parallel-size ${TP:-1}
+          --max-model-len ${MAX_MODEL_LEN:-4096}
+          --dtype auto
+          --gpu-memory-utilization 0.90
+      "
+    environment:
+      - VLLM_MODEL=${VLLM_MODEL:-meta-llama/Meta-Llama-3.1-8B-Instruct}
+      - HUGGING_FACE_HUB_TOKEN=${HUGGING_FACE_HUB_TOKEN:-}
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - hf-cache:/root/.cache/huggingface
+    networks:
+      - gvc-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 20
+      start_period: 120s  # model loading can take a while
+
+  # ---- GVC-Local FastAPI server -------------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - VLLM_BASE_URL=http://vllm:8000/v1
+      - VLLM_MODEL=${VLLM_MODEL:-meta-llama/Meta-Llama-3.1-8B-Instruct}
+      - API_LOG_LEVEL=${API_LOG_LEVEL:-INFO}
+    ports:
+      - "8080:8080"
+    depends_on:
+      vllm:
+        condition: service_healthy
+    networks:
+      - gvc-net
+    restart: unless-stopped
+
+volumes:
+  hf-cache:
+    driver: local
+
+networks:
+  gvc-net:
+    driver: bridge

@@ -1,0 +1,84 @@
+# ──────────────────────────────────────────────────────────────────────
+# gvc-local  ·  LoRA / QLoRA fine-tuning configuration
+# ──────────────────────────────────────────────────────────────────────
+# Usage:
+#   python -m gvc_local.finetune.train --config configs/finetune.yaml
+# ──────────────────────────────────────────────────────────────────────
+
+# ── Model ────────────────────────────────────────────────────────────
+model:
+  name: "meta-llama/Meta-Llama-3.1-8B-Instruct"
+  # Alternatives:
+  #   name: "Qwen/Qwen2.5-7B-Instruct"
+  trust_remote_code: false          # set true for Qwen
+
+# ── LoRA ─────────────────────────────────────────────────────────────
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+  task_type: "CAUSAL_LM"
+  bias: "none"
+
+# ── Quantisation (QLoRA) ────────────────────────────────────────────
+quantization:
+  enabled: true                     # false → full-precision LoRA
+  load_in_4bit: true
+  bnb_4bit_compute_dtype: "bfloat16"
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_use_double_quant: true
+
+# ── Data ─────────────────────────────────────────────────────────────
+data:
+  trace_path: "data/traces/solver_traces.jsonl"
+  output_dir: "data/sft"
+  val_ratio: 0.1
+  max_seq_length: 2048
+  include_near_misses: false        # true → keep solves with ≤1 wrong guess
+  roles:                            # which agent roles to build datasets for
+    - guesser
+    - validator
+    - snap_guesser
+
+# ── Training ─────────────────────────────────────────────────────────
+training:
+  output_dir: "checkpoints/lora"
+  num_train_epochs: 3
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 4    # effective batch = 16
+  learning_rate: 2.0e-4
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  bf16: true
+  tf32: true
+  logging_steps: 10
+  eval_strategy: "steps"
+  eval_steps: 50
+  save_strategy: "steps"
+  save_steps: 100
+  save_total_limit: 3
+  gradient_checkpointing: true
+  dataloader_num_workers: 4
+  optim: "paged_adamw_8bit"
+  max_grad_norm: 1.0
+  seed: 42
+  report_to: "wandb"
+
+# ── Weights & Biases ────────────────────────────────────────────────
+wandb:
+  project: "gvc-local-finetune"
+  entity: null                      # defaults to your W&B user
+  run_name: null                    # auto-generated if null
+  tags:
+    - gvc-local
+    - lora
