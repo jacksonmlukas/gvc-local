@@ -34,9 +34,17 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-import faiss
 import numpy as np
-from sentence_transformers import SentenceTransformer
+
+try:
+    import faiss
+except ImportError:
+    faiss = None  # type: ignore[assignment]
+
+try:
+    from sentence_transformers import SentenceTransformer
+except ImportError:
+    SentenceTransformer = None  # type: ignore[assignment,misc]
 
 logger = logging.getLogger(__name__)
 
