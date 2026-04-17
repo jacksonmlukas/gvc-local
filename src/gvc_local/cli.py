@@ -148,6 +148,12 @@ def _build_solver(
     default=None,
     help="Output JSONL path for results summary.",
 )
+@click.option(
+    "--delay",
+    type=float,
+    default=0.0,
+    help="Seconds to wait between puzzles (helps with cloud rate limits).",
+)
 @click.option("--dry-run", is_flag=True, help="Print config and exit.")
 @click.option("-v", "--verbose", is_flag=True, help="Enable DEBUG logging.")
 def main(
@@ -160,6 +166,7 @@ def main(
     temperature: float | None,
     traces: str | None,
     out: str | None,
+    delay: float,
     dry_run: bool,
     verbose: bool,
 ) -> None:
@@ -215,6 +222,10 @@ def main(
         trace_dir.mkdir(parents=True, exist_ok=True)
 
     # Run solver over puzzles
+    out_path = Path(out) if out else None
+    if out_path:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
     results: list[dict] = []
     total_solved = 0
     wall_start = time.time()
@@ -242,17 +253,25 @@ def main(
             f"strikes={game.current_strikes}"
         )
 
-        results.append(
-            {
-                "puzzle_id": puzzle_num,
-                "solved": is_solved,
-                "categories_solved": sum(solved_cats),
-                "strikes": game.current_strikes,
-            }
-        )
+        row = {
+            "puzzle_id": puzzle_num,
+            "solved": is_solved,
+            "categories_solved": sum(solved_cats),
+            "strikes": game.current_strikes,
+        }
+        results.append(row)
+
+        # Append incrementally so partial results survive crashes
+        if out_path:
+            with open(out_path, "a") as fh:
+                fh.write(json.dumps(row) + "\n")
 
         # Reset game state for next run (games are mutated in place)
         game.reset()
+
+        # Rate-limit delay (cloud providers throttle aggressively)
+        if delay > 0 and idx < len(games) - 1:
+            time.sleep(delay)
 
     wall_elapsed = time.time() - wall_start
 
@@ -267,13 +286,7 @@ def main(
     click.echo(f"  Wall time:  {wall_elapsed:.1f}s")
     click.echo(f"{'=' * 50}")
 
-    # Write results JSONL
-    if out:
-        out_path = Path(out)
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(out_path, "w") as fh:
-            for r in results:
-                fh.write(json.dumps(r) + "\n")
+    if out_path:
         click.echo(f"Results written to {out_path}")
 
 
