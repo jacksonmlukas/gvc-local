@@ -111,7 +111,9 @@ except ImportError:
             ]
             for cat in self._og_groups:
                 solved = cat not in self.categories
-                lines.append(f"  {'[x]' if solved else '[ ]'} {cat.group}: {', '.join(cat.members)}")
+                lines.append(
+                    f"  {'[x]' if solved else '[ ]'} {cat.group}: {', '.join(cat.members)}"
+                )
             return "\n".join(lines)
 
     def load_games() -> list[Connections]:  # type: ignore[no-redef]
@@ -122,10 +124,7 @@ except ImportError:
         if not isinstance(raw, list):
             raise ValueError("Expected a JSON list of games")
         return [
-            Connections(
-                categories=[Category(**cat) for cat in game["answers"]]
-            )
-            for game in raw
+            Connections(categories=[Category(**cat) for cat in game["answers"]]) for game in raw
         ]
 
     def load_json_to_connections(filename: str) -> list[Connections]:  # type: ignore[no-redef]

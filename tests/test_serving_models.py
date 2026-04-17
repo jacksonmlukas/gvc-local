@@ -13,10 +13,22 @@ from gvc_local.serving.models import (
 
 # A valid 16-word board (taken from a public NYT Connections example).
 VALID_WORDS = [
-    "BASS", "TROUT", "SALMON", "COD",
-    "JAZZ", "BLUES", "ROCK", "POP",
-    "MARS", "VENUS", "SATURN", "JUPITER",
-    "RUBY", "PEARL", "JADE", "AMBER",
+    "BASS",
+    "TROUT",
+    "SALMON",
+    "COD",
+    "JAZZ",
+    "BLUES",
+    "ROCK",
+    "POP",
+    "MARS",
+    "VENUS",
+    "SATURN",
+    "JUPITER",
+    "RUBY",
+    "PEARL",
+    "JADE",
+    "AMBER",
 ]
 
 
@@ -93,7 +105,11 @@ class TestSolveResponse:
             solved=False,
             total_guesses=1,
             latency_ms=1234.5,
-            token_usage={"prompt_tokens": 100, "completion_tokens": 50, "total_tokens": 150},
+            token_usage={
+                "prompt_tokens": 100,
+                "completion_tokens": 50,
+                "total_tokens": 150,
+            },
         )
         data = resp.model_dump()
         assert data["puzzle_id"] == "abc123"

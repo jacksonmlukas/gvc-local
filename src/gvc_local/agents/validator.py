@@ -138,10 +138,7 @@ class ValidatorAgent(Agent):
         )
 
         remaining_str = ", ".join(remaining_words)
-        sections.append(
-            f"**Remaining Words:**\n"
-            f"Words left on the board: {remaining_str}"
-        )
+        sections.append(f"**Remaining Words:**\nWords left on the board: {remaining_str}")
 
         if feedback:
             sections.append(f"**Game Engine Feedback**\n{feedback}")
@@ -192,7 +189,11 @@ class ValidatorAgent(Agent):
         """Try to extract a 'Group: w1, w2, w3, w4' line from the reply."""
         m = re.search(r"Group:\s*(.+)", reply, re.IGNORECASE)
         if m:
-            words = [w.strip().upper().replace(",", "") for w in re.split(r",\s*", m.group(1)) if w.strip()]
+            words = [
+                w.strip().upper().replace(",", "")
+                for w in re.split(r",\s*", m.group(1))
+                if w.strip()
+            ]
             if len(words) == 4:
                 return words
         return []

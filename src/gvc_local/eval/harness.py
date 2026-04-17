@@ -120,12 +120,8 @@ class EvalConfig:
 # Console table formatting
 # ---------------------------------------------------------------------------
 
-_TABLE_HEADER = (
-    "| {metric:<25s} | {mean:>8s} | {ci_lower:>8s} | {ci_upper:>8s} |"
-)
-_TABLE_ROW = (
-    "| {metric:<25s} | {mean:>8.4f} | {ci_lower:>8.4f} | {ci_upper:>8.4f} |"
-)
+_TABLE_HEADER = "| {metric:<25s} | {mean:>8s} | {ci_lower:>8s} | {ci_upper:>8s} |"
+_TABLE_ROW = "| {metric:<25s} | {mean:>8.4f} | {ci_lower:>8.4f} | {ci_upper:>8.4f} |"
 _TABLE_SEP = "+" + "-" * 27 + "+" + "-" * 10 + "+" + "-" * 10 + "+" + "-" * 10 + "+"
 
 
@@ -144,9 +140,7 @@ def _pretty_print_summary(
     lines.append(f"  Evaluation Summary: {solver} / {model}  (n={n_puzzles})")
     lines.append(_TABLE_SEP)
     lines.append(
-        _TABLE_HEADER.format(
-            metric="Metric", mean="Mean", ci_lower="CI Low", ci_upper="CI High"
-        )
+        _TABLE_HEADER.format(metric="Metric", mean="Mean", ci_lower="CI Low", ci_upper="CI High")
     )
     lines.append(_TABLE_SEP)
 

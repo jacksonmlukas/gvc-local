@@ -53,10 +53,22 @@ def test_metrics_empty(client: TestClient) -> None:
 # ---------------------------------------------------------------------------
 
 VALID_WORDS = [
-    "BASS", "TROUT", "SALMON", "COD",
-    "JAZZ", "BLUES", "ROCK", "POP",
-    "MARS", "VENUS", "SATURN", "JUPITER",
-    "RUBY", "PEARL", "JADE", "AMBER",
+    "BASS",
+    "TROUT",
+    "SALMON",
+    "COD",
+    "JAZZ",
+    "BLUES",
+    "ROCK",
+    "POP",
+    "MARS",
+    "VENUS",
+    "SATURN",
+    "JUPITER",
+    "RUBY",
+    "PEARL",
+    "JADE",
+    "AMBER",
 ]
 
 # Fake OpenAI-style response object returned by client.chat_raw().
@@ -164,6 +176,9 @@ def test_solve_unparseable_output(mock_client_factory: MagicMock, client: TestCl
 def test_cors_headers(client: TestClient) -> None:
     resp = client.options(
         "/health",
-        headers={"Origin": "http://localhost:3000", "Access-Control-Request-Method": "GET"},
+        headers={
+            "Origin": "http://localhost:3000",
+            "Access-Control-Request-Method": "GET",
+        },
     )
     assert "access-control-allow-origin" in resp.headers

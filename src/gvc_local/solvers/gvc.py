@@ -40,9 +40,7 @@ def _grounding_check(
     """
     proc_guess = [w.strip().upper().replace(",", "") for w in guess]
     proc_remaining = [w.strip().upper().replace(",", "") for w in remaining_words]
-    proc_failed = [
-        [w.strip().upper().replace(",", "") for w in g] for g in sorted_failed_guesses
-    ]
+    proc_failed = [[w.strip().upper().replace(",", "") for w in g] for g in sorted_failed_guesses]
 
     errors: list[str] = []
 
@@ -161,7 +159,9 @@ class GVCSolver(BaseSolver):
                     validator_feedback=self._validator_feedback or "",
                     previous_understanding=self._guesser_understanding,
                 )
-                self._guesser_understanding = understanding if understanding else self._guesser_understanding
+                self._guesser_understanding = (
+                    understanding if understanding else self._guesser_understanding
+                )
                 metrics.total_llm_calls += 1
             except ValueError as exc:
                 logger.warning("[GVC] guesser parse error on attempt %d: %s", attempt, exc)
@@ -186,10 +186,7 @@ class GVCSolver(BaseSolver):
             # Step 3: Validator
             try:
                 # Build the raw guesser reply for the validator (reconstruct)
-                guesser_reply_text = (
-                    f"Group: {', '.join(group)}\n"
-                    f"Category: {category}"
-                )
+                guesser_reply_text = f"Group: {', '.join(group)}\nCategory: {category}"
                 agreement, val_feedback, val_group = self.validator.validate(
                     guesser_reply=guesser_reply_text,
                     remaining_words=remaining_words,
@@ -227,9 +224,7 @@ class GVCSolver(BaseSolver):
     def _format_failed_feedback(self) -> str:
         if not self._sorted_failed:
             return ""
-        lines = [
-            "- The following groups have been guessed but are NOT part of the solution:"
-        ]
+        lines = ["- The following groups have been guessed but are NOT part of the solution:"]
         for fg in self._sorted_failed:
             lines.append(f"  - {', '.join(fg)}")
         return "\n".join(lines)

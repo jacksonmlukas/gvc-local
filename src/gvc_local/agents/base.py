@@ -115,7 +115,7 @@ class Agent:
                 return text
             except _RETRYABLE as exc:
                 last_exc = exc
-                wait = _BACKOFF_BASE ** attempt
+                wait = _BACKOFF_BASE**attempt
                 logger.warning(
                     "[%s] transient error on attempt %d/%d, retrying in %.1fs: %s",
                     self.role,
@@ -125,9 +125,7 @@ class Agent:
                     exc,
                 )
                 time.sleep(wait)
-        raise RuntimeError(
-            f"[{self.role}] failed after {_MAX_RETRIES} retries"
-        ) from last_exc
+        raise RuntimeError(f"[{self.role}] failed after {_MAX_RETRIES} retries") from last_exc
 
     def _call_raw_with_retry(
         self,
@@ -138,8 +136,12 @@ class Agent:
     ) -> tuple[str, dict[str, Any]]:
         """Call ``client.chat_raw`` with retry; return (text, usage_dict)."""
         kwargs: dict[str, Any] = {
-            "temperature": temperature if temperature is not None else self.client.cfg.default_temperature,
-            "max_tokens": max_tokens if max_tokens is not None else self.client.cfg.default_max_tokens,
+            "temperature": temperature
+            if temperature is not None
+            else self.client.cfg.default_temperature,
+            "max_tokens": max_tokens
+            if max_tokens is not None
+            else self.client.cfg.default_max_tokens,
         }
 
         last_exc: Exception | None = None
@@ -158,7 +160,7 @@ class Agent:
                 return text, usage
             except _RETRYABLE as exc:
                 last_exc = exc
-                wait = _BACKOFF_BASE ** attempt
+                wait = _BACKOFF_BASE**attempt
                 logger.warning(
                     "[%s] transient error (raw) on attempt %d/%d, retrying in %.1fs: %s",
                     self.role,

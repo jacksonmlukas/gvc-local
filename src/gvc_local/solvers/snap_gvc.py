@@ -126,13 +126,17 @@ class SnapGVCSolver(BaseSolver):
         self.gvc.reset()
 
         import time
+
         t0 = time.time()
 
         if recorder:
-            recorder.record("game_start", {
-                "words": game.all_words,
-                "solver": "snap_gvc",
-            })
+            recorder.record(
+                "game_start",
+                {
+                    "words": game.all_words,
+                    "solver": "snap_gvc",
+                },
+            )
 
         while not game.is_over:
             # ---- Conservative phase (System-2) ----
@@ -190,11 +194,14 @@ class SnapGVCSolver(BaseSolver):
                         guess_words,
                     )
                     if recorder:
-                        recorder.record("wrong_guess", {
-                            "phase": "conservative",
-                            "guess": guess_words,
-                            "category": category,
-                        })
+                        recorder.record(
+                            "wrong_guess",
+                            {
+                                "phase": "conservative",
+                                "guess": guess_words,
+                                "category": category,
+                            },
+                        )
 
                     # Reset agent state for fresh attempt
                     self.gvc._reset_guess_state()
@@ -213,11 +220,14 @@ class SnapGVCSolver(BaseSolver):
                         result.group,
                     )
                     if recorder:
-                        recorder.record("correct_guess", {
-                            "phase": "conservative",
-                            "guess": guess_words,
-                            "actual_category": result.group,
-                        })
+                        recorder.record(
+                            "correct_guess",
+                            {
+                                "phase": "conservative",
+                                "guess": guess_words,
+                                "actual_category": result.group,
+                            },
+                        )
                     self.gvc._reset_guess_state()
 
             if game.is_over:
@@ -266,11 +276,14 @@ class SnapGVCSolver(BaseSolver):
                     self._sorted_failed.append(sorted_g)
                     logger.info("[SnapGVC] SNAP WRONG: %s", guess_words)
                     if recorder:
-                        recorder.record("wrong_guess", {
-                            "phase": "snap",
-                            "guess": guess_words,
-                            "reason": reason,
-                        })
+                        recorder.record(
+                            "wrong_guess",
+                            {
+                                "phase": "snap",
+                                "guess": guess_words,
+                                "reason": reason,
+                            },
+                        )
                 else:
                     cat_idx = game._og_groups.index(result)
                     metrics.record_solve(cat_idx)
@@ -281,19 +294,25 @@ class SnapGVCSolver(BaseSolver):
                         result.group,
                     )
                     if recorder:
-                        recorder.record("correct_guess", {
-                            "phase": "snap",
-                            "guess": guess_words,
-                            "actual_category": result.group,
-                        })
+                        recorder.record(
+                            "correct_guess",
+                            {
+                                "phase": "snap",
+                                "guess": guess_words,
+                                "actual_category": result.group,
+                            },
+                        )
 
         metrics.wall_time_s = time.time() - t0
 
         if recorder:
-            recorder.record("game_end", {
-                "solved": game.solved_categories,
-                "metrics": metrics.to_dict(),
-            })
+            recorder.record(
+                "game_end",
+                {
+                    "solved": game.solved_categories,
+                    "metrics": metrics.to_dict(),
+                },
+            )
             recorder.close()
 
         logger.info(

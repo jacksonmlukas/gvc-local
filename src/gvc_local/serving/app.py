@@ -56,9 +56,7 @@ _BOOT_TIME: float = 0.0
 def _build_endpoint_config(model_override: str | None = None) -> EndpointConfig:
     """Construct an ``EndpointConfig`` from env vars with optional model override."""
     base_url = os.getenv("VLLM_BASE_URL", "http://localhost:8000/v1")
-    model = model_override or os.getenv(
-        "VLLM_MODEL", "meta-llama/Meta-Llama-3.1-8B-Instruct"
-    )
+    model = model_override or os.getenv("VLLM_MODEL", "meta-llama/Meta-Llama-3.1-8B-Instruct")
     return EndpointConfig(model=model, base_url=base_url)
 
 
@@ -124,7 +122,9 @@ def _run_solver(
         },
     ]
 
-    temperature = request.temperature if request.temperature is not None else cfg.default_temperature
+    temperature = (
+        request.temperature if request.temperature is not None else cfg.default_temperature
+    )
 
     t0 = time.perf_counter()
     raw = client.chat_raw(
@@ -223,8 +223,7 @@ def create_app() -> FastAPI:
         title="GVC-Local API",
         version="0.1.0",
         description=(
-            "Serving layer for GVC/Snap-GVC puzzle solvers backed by "
-            "open-weight models via vLLM."
+            "Serving layer for GVC/Snap-GVC puzzle solvers backed by open-weight models via vLLM."
         ),
         lifespan=_lifespan,
     )

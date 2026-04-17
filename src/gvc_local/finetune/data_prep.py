@@ -277,7 +277,8 @@ def split_dataset(
         )
     else:
         logger.warning(
-            "Cannot stratify (distribution=%s); falling back to random split.", unique_counts
+            "Cannot stratify (distribution=%s); falling back to random split.",
+            unique_counts,
         )
         train, val = train_test_split(samples, test_size=val_ratio, random_state=seed)
 
@@ -313,7 +314,12 @@ def save_huggingface(
 
     def _flatten(samples: list[dict]) -> dict[str, list]:
         """Convert list-of-dicts into dict-of-lists for Dataset.from_dict."""
-        flat: dict[str, list] = {"conversations": [], "puzzle_id": [], "difficulty": [], "agent_role": []}
+        flat: dict[str, list] = {
+            "conversations": [],
+            "puzzle_id": [],
+            "difficulty": [],
+            "agent_role": [],
+        }
         for s in samples:
             flat["conversations"].append(json.dumps(s["conversations"], ensure_ascii=False))
             flat["puzzle_id"].append(s["metadata"]["puzzle_id"])
@@ -360,7 +366,13 @@ def save_huggingface(
 )
 @click.option("--val-ratio", type=float, default=0.1, show_default=True)
 @click.option("--include-near-misses", is_flag=True, default=False, show_default=True)
-@click.option("--format", "fmt", type=click.Choice(["jsonl", "hf", "both"]), default="both", show_default=True)
+@click.option(
+    "--format",
+    "fmt",
+    type=click.Choice(["jsonl", "hf", "both"]),
+    default="both",
+    show_default=True,
+)
 @click.option("--seed", type=int, default=42, show_default=True)
 def main(
     trace_path: str,

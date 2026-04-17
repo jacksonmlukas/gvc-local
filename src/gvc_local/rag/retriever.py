@@ -312,7 +312,11 @@ class PuzzleRetriever:
 
         try:
             sel = faiss.IDSelectorArray(subset_ids)
-            params = faiss.SearchParametersIVF(sel=sel) if hasattr(self.index, "nprobe") else faiss.SearchParameters(sel=sel)
+            params = (
+                faiss.SearchParametersIVF(sel=sel)
+                if hasattr(self.index, "nprobe")
+                else faiss.SearchParameters(sel=sel)
+            )
             scores, ids = self.index.search(query_vec, k_actual, params=params)
         except (RuntimeError, AttributeError):
             # Fallback: search a wider set and post-filter

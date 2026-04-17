@@ -145,8 +145,6 @@ class SnapGuesserAgent(Agent):
         words = [w.strip().strip('"').strip("'") for w in words_raw.split(",")]
 
         if len(words) != 4:
-            raise ValueError(
-                f"Expected 4 words in snap guess, got {len(words)}: {words}"
-            )
+            raise ValueError(f"Expected 4 words in snap guess, got {len(words)}: {words}")
 
         return words, reason

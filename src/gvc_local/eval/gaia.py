@@ -139,8 +139,17 @@ def load_gaia_tasks(
             metadata={
                 k: v
                 for k, v in row.items()
-                if k not in {"task_id", "id", "Question", "question", "Final answer",
-                             "final_answer", "Level", "level"}
+                if k
+                not in {
+                    "task_id",
+                    "id",
+                    "Question",
+                    "question",
+                    "Final answer",
+                    "final_answer",
+                    "Level",
+                    "level",
+                }
             },
         )
         tasks.append(task)

@@ -52,8 +52,13 @@ class LoRAHyperparams:
     dropout: float = 0.05
     target_modules: list[str] = field(
         default_factory=lambda: [
-            "q_proj", "k_proj", "v_proj", "o_proj",
-            "gate_proj", "up_proj", "down_proj",
+            "q_proj",
+            "k_proj",
+            "v_proj",
+            "o_proj",
+            "gate_proj",
+            "up_proj",
+            "down_proj",
         ]
     )
     task_type: str = "CAUSAL_LM"
@@ -300,7 +305,9 @@ def train(cfg: FinetuneConfig) -> None:
 
     def _to_hf_dataset(samples: list[dict]) -> Dataset:
         convos = [
-            json.dumps(s["conversations"]) if isinstance(s["conversations"], list) else s["conversations"]
+            json.dumps(s["conversations"])
+            if isinstance(s["conversations"], list)
+            else s["conversations"]
             for s in samples
         ]
         return Dataset.from_dict({"conversations": convos})

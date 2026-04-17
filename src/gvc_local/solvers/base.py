@@ -151,13 +151,16 @@ class BaseSolver(abc.ABC):
         t0 = time.time()
 
         if recorder:
-            recorder.record("game_start", {
-                "words": game.all_words,
-                "categories": [
-                    {"group": c.group, "level": c.level, "members": c.members}
-                    for c in game._og_groups
-                ],
-            })
+            recorder.record(
+                "game_start",
+                {
+                    "words": game.all_words,
+                    "categories": [
+                        {"group": c.group, "level": c.level, "members": c.members}
+                        for c in game._og_groups
+                    ],
+                },
+            )
 
         while not game.is_over:
             remaining = game.all_words
@@ -196,11 +199,14 @@ class BaseSolver(abc.ABC):
                     game.current_strikes,
                 )
                 if recorder:
-                    recorder.record("wrong_guess", {
-                        "guess": guess_words,
-                        "category": category,
-                        "strikes": game.current_strikes,
-                    })
+                    recorder.record(
+                        "wrong_guess",
+                        {
+                            "guess": guess_words,
+                            "category": category,
+                            "strikes": game.current_strikes,
+                        },
+                    )
             else:
                 # Correct guess
                 cat_idx = game._og_groups.index(result)
@@ -212,20 +218,26 @@ class BaseSolver(abc.ABC):
                     result.level,
                 )
                 if recorder:
-                    recorder.record("correct_guess", {
-                        "guess": guess_words,
-                        "proposed_category": category,
-                        "actual_category": result.group,
-                        "level": result.level,
-                    })
+                    recorder.record(
+                        "correct_guess",
+                        {
+                            "guess": guess_words,
+                            "proposed_category": category,
+                            "actual_category": result.group,
+                            "level": result.level,
+                        },
+                    )
 
         metrics.wall_time_s = time.time() - t0
 
         if recorder:
-            recorder.record("game_end", {
-                "solved": game.solved_categories,
-                "metrics": metrics.to_dict(),
-            })
+            recorder.record(
+                "game_end",
+                {
+                    "solved": game.solved_categories,
+                    "metrics": metrics.to_dict(),
+                },
+            )
             recorder.close()
 
         logger.info(

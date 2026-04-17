@@ -134,10 +134,7 @@ class GuesserAgent(Agent):
 
         # Normalise words to uppercase, strip whitespace
         group = [w.strip().upper().replace(",", "") for w in group]
-        understanding = [
-            [w.strip().upper().replace(",", "") for w in grp]
-            for grp in understanding
-        ]
+        understanding = [[w.strip().upper().replace(",", "") for w in grp] for grp in understanding]
 
         logger.info("[Guesser] group=%s  category=%s", group, category)
         return group, category, understanding
@@ -161,9 +158,7 @@ class GuesserAgent(Agent):
             sections.append(f"**Game Engine Feedback**\n{feedback}")
 
         if previous_understanding:
-            lines = "\n".join(
-                f"  * {', '.join(grp)}" for grp in previous_understanding
-            )
+            lines = "\n".join(f"  * {', '.join(grp)}" for grp in previous_understanding)
             sections.append(
                 f"**Your Last Board Understanding**\n"
                 f"- This is your previous understanding of the board:\n{lines}"
@@ -205,9 +200,7 @@ class GuesserAgent(Agent):
         if und_match:
             und_text = und_match.group(1)
             # Match lines like "Group1: WORD, WORD, WORD, WORD" or "Group 1: ..."
-            group_lines = re.findall(
-                r"Group\s*\d+\s*:\s*(.+)", und_text, re.IGNORECASE
-            )
+            group_lines = re.findall(r"Group\s*\d+\s*:\s*(.+)", und_text, re.IGNORECASE)
             for line in group_lines:
                 words = [w.strip() for w in re.split(r",\s*", line) if w.strip()]
                 if words:
@@ -237,8 +230,6 @@ class GuesserAgent(Agent):
         category = cat_m.group(1).strip()
 
         if len(group) != 4:
-            raise ValueError(
-                f"Expected 4 words in group, got {len(group)}: {group}"
-            )
+            raise ValueError(f"Expected 4 words in group, got {len(group)}: {group}")
 
         return group, category, understanding
