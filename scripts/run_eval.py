@@ -36,11 +36,11 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT / "src"))
 
-from gvc_local.endpoint import EndpointConfig
-from gvc_local.eval.harness import EvalConfig, run_evaluation, RunResult
-from gvc_local.eval.gaia import GaiaEvaluator, load_gaia_tasks
-from gvc_local.eval.tracking import ExperimentTracker
-from gvc_local.eval_harness import summarize
+from gvc_local.endpoint import EndpointConfig  # noqa: E402
+from gvc_local.eval.gaia import GaiaEvaluator, load_gaia_tasks  # noqa: E402
+from gvc_local.eval.harness import EvalConfig, RunResult, run_evaluation  # noqa: E402
+from gvc_local.eval.tracking import ExperimentTracker  # noqa: E402
+from gvc_local.eval_harness import summarize  # noqa: E402
 
 logger = logging.getLogger("gvc_local.eval")
 
@@ -69,28 +69,67 @@ def _make_connections_solver(
     Returns a function ``game -> RunResult`` suitable for
     :func:`run_evaluation`.
 
-    .. note::
-
-       Actual solver dispatch is wired in M1/M2.  This stub exercises the
-       full pipeline so the harness, tracking, and reporting layers can be
-       validated end-to-end.
+    Instantiates a real GVC or Snap-GVC solver and plays the game through
+    the standard ``BaseSolver.play()`` loop.
     """
+    from gvc_local.game import Category, Connections
+    from gvc_local.solvers.gvc import GVCSolver
+    from gvc_local.solvers.snap_gvc import SnapGVCSolver
 
-    def _stub_solver(game: dict) -> RunResult:
-        """Placeholder solver that always returns an unsolved result.
+    client = endpoint.client()
 
-        Replace with real solver dispatch once the upstream rsallms solvers
-        are integrated (see ROADMAP.md M1).
-        """
-        return RunResult(
-            solved=False,
-            guesses=0,
-            out_of_board_guesses=0,
-            puzzle_id=game.get("puzzle_id", 0),
-            strata=game.get("category", "uncategorised"),
+    if solver_name == "snap_gvc":
+        solver = SnapGVCSolver(client)
+    elif solver_name == "gvc":
+        solver = GVCSolver(client)
+    elif solver_name in ("basic", "cot"):
+        # basic/cot use GVC with a single internal retry (no consensus loop)
+        solver = GVCSolver(client, max_internal_retries=1)
+    else:
+        raise ValueError(f"Unknown solver: {solver_name!r}")
+
+    def _solve(game: dict) -> RunResult:
+        """Run the solver on a game dict and return a RunResult."""
+        puzzle_id = game.get("puzzle_id", 0)
+        strata = game.get("category", "uncategorised")
+
+        # Build a Connections game object from the dict.
+        # Game dicts have an "answers" key with a list of category dicts.
+        answers = game.get("answers", [])
+        if not answers:
+            # Placeholder game with no real data — return unsolved.
+            return RunResult(
+                solved=False,
+                guesses=0,
+                out_of_board_guesses=0,
+                puzzle_id=puzzle_id,
+                strata=strata,
+            )
+
+        categories = [Category(**cat) for cat in answers]
+        conn = Connections(categories=categories)
+
+        # Play the game
+        solved_cats = solver.play(conn)
+
+        # Compute metrics
+        is_solved = all(solved_cats)
+        total_guesses = conn.current_strikes + sum(solved_cats)
+        out_of_board = (
+            sum(len(h) for h in getattr(solver, "_hallucinated", []))
+            if hasattr(solver, "_hallucinated")
+            else 0
         )
 
-    return _stub_solver
+        return RunResult(
+            solved=is_solved,
+            guesses=total_guesses,
+            out_of_board_guesses=out_of_board,
+            puzzle_id=puzzle_id,
+            strata=strata,
+        )
+
+    return _solve
 
 
 def _make_gaia_solver(
@@ -214,8 +253,18 @@ def _build_eval_config(
 @click.option("--no-wandb", is_flag=True, help="Disable W&B tracking.")
 @click.option("--n-bootstrap", type=int, default=1000, help="Bootstrap resamples for CIs.")
 @click.option("--per-stratum", type=int, default=5, help="Max samples per stratum.")
-@click.option("--config", type=click.Path(exists=True), default=None, help="YAML config file (overrides CLI args).")
-@click.option("--games-path", type=click.Path(exists=True), default=None, help="Path to games JSONL file (Connections).")
+@click.option(
+    "--config",
+    type=click.Path(exists=True),
+    default=None,
+    help="YAML config file (overrides CLI args).",
+)
+@click.option(
+    "--games-path",
+    type=click.Path(exists=True),
+    default=None,
+    help="Path to games JSONL file (Connections).",
+)
 @click.option("--dry-run", is_flag=True, help="Print config and exit.")
 @click.option("-v", "--verbose", is_flag=True, help="Enable DEBUG logging.")
 def main(
@@ -346,12 +395,9 @@ def _run_connections(
         click.echo(f"Loaded {len(games)} games from {games_path}")
     else:
         # Generate placeholder games for pipeline testing
-        click.echo(
-            "No --games-path provided. Using placeholder games for pipeline validation."
-        )
+        click.echo("No --games-path provided. Using placeholder games for pipeline validation.")
         games = [
-            {"puzzle_id": i, "category": "placeholder", "board": []}
-            for i in range(max(end, 100))
+            {"puzzle_id": i, "category": "placeholder", "board": []} for i in range(max(end, 100))
         ]
 
     model_id = MODEL_MAP[model]().model
@@ -422,13 +468,18 @@ def _run_gaia(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w") as fh:
         for r in results:
-            fh.write(json.dumps({
-                "puzzle_id": r.puzzle_id,
-                "solved": r.solved,
-                "guesses": r.guesses,
-                "out_of_board_guesses": r.out_of_board_guesses,
-                "strata": r.strata,
-            }) + "\n")
+            fh.write(
+                json.dumps(
+                    {
+                        "puzzle_id": r.puzzle_id,
+                        "solved": r.solved,
+                        "guesses": r.guesses,
+                        "out_of_board_guesses": r.out_of_board_guesses,
+                        "strata": r.strata,
+                    }
+                )
+                + "\n"
+            )
 
     click.echo(f"\nGAIA evaluation complete. {len(results)} tasks evaluated.")
     click.echo(f"Results saved to {out_path}")

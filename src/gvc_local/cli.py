@@ -1,0 +1,238 @@
+"""Command-line interface for running GVC/Snap-GVC solvers on Connections puzzles.
+
+Usage::
+
+    # Solve puzzles 0–9 with Snap-GVC on Llama 3.1 8B
+    gvc-local snap_gvc llama-3.1-8b --start 0 --end 10
+
+    # Save traces for fine-tuning
+    gvc-local gvc llama-3.1-8b --start 0 --end 50 --traces data/traces/
+
+    # Point at a custom vLLM endpoint
+    gvc-local snap_gvc qwen-2.5-7b --base-url http://gpu-box:8000/v1
+
+    # Dry-run to verify config
+    gvc-local snap_gvc llama-3.1-8b --dry-run
+"""
+
+from __future__ import annotations
+
+import json
+import logging
+import time
+from pathlib import Path
+
+import click
+
+from gvc_local.endpoint import Client, EndpointConfig
+from gvc_local.game import load_games
+from gvc_local.solvers.base import BaseSolver
+
+logger = logging.getLogger("gvc_local.cli")
+
+# ---------------------------------------------------------------------------
+# Model registry
+# ---------------------------------------------------------------------------
+
+MODEL_MAP: dict[str, str] = {
+    "llama-3.1-8b": "llama31_8b",
+    "llama-3.3-70b": "llama33_70b",
+    "qwen-2.5-7b": "qwen25_7b",
+}
+
+
+def _resolve_endpoint(model_key: str, base_url: str) -> EndpointConfig:
+    """Map a friendly model name to an ``EndpointConfig``."""
+    factory_name = MODEL_MAP[model_key]
+    factory = getattr(EndpointConfig, factory_name)
+    return factory(base_url=base_url)
+
+
+# ---------------------------------------------------------------------------
+# Solver factory
+# ---------------------------------------------------------------------------
+
+
+def _build_solver(
+    solver_name: str, client: Client, *, temperature: float | None = None
+) -> BaseSolver:
+    """Instantiate the requested solver backed by *client*."""
+    from gvc_local.solvers.gvc import GVCSolver
+    from gvc_local.solvers.snap_gvc import SnapGVCSolver
+
+    kwargs = {}
+    if temperature is not None:
+        kwargs["guesser_temperature"] = temperature
+        kwargs["validator_temperature"] = temperature
+
+    if solver_name == "gvc":
+        return GVCSolver(client, **kwargs)
+    elif solver_name == "snap_gvc":
+        return SnapGVCSolver(client, **kwargs)
+    else:
+        raise click.ClickException(f"Unknown solver: {solver_name!r}")
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+
+@click.command(context_settings={"help_option_names": ["-h", "--help"]})
+@click.argument("solver", type=click.Choice(["gvc", "snap_gvc"]))
+@click.argument("model", type=click.Choice(list(MODEL_MAP)))
+@click.option("--start", type=int, default=0, help="First puzzle index (inclusive).")
+@click.option("--end", type=int, default=10, help="Last puzzle index (exclusive).")
+@click.option(
+    "--base-url",
+    type=str,
+    default="http://localhost:8000/v1",
+    help="vLLM OpenAI-compatible endpoint URL.",
+)
+@click.option(
+    "--temperature",
+    type=float,
+    default=None,
+    help="Override guesser/validator temperature.",
+)
+@click.option(
+    "--traces",
+    type=click.Path(),
+    default=None,
+    help="Directory to write JSONL interaction traces (for fine-tuning).",
+)
+@click.option(
+    "--out",
+    type=click.Path(),
+    default=None,
+    help="Output JSONL path for results summary.",
+)
+@click.option("--dry-run", is_flag=True, help="Print config and exit.")
+@click.option("-v", "--verbose", is_flag=True, help="Enable DEBUG logging.")
+def main(
+    solver: str,
+    model: str,
+    start: int,
+    end: int,
+    base_url: str,
+    temperature: float | None,
+    traces: str | None,
+    out: str | None,
+    dry_run: bool,
+    verbose: bool,
+) -> None:
+    """Run GVC or Snap-GVC solvers on NYT Connections puzzles."""
+    logging.basicConfig(
+        level=logging.DEBUG if verbose else logging.INFO,
+        format="%(asctime)s %(name)s %(levelname)s  %(message)s",
+        datefmt="%H:%M:%S",
+    )
+
+    endpoint = _resolve_endpoint(model, base_url)
+
+    plan = {
+        "solver": solver,
+        "model": endpoint.model,
+        "base_url": base_url,
+        "puzzle_range": f"[{start}, {end})",
+        "temperature": temperature or endpoint.default_temperature,
+        "traces": traces,
+        "output": out,
+    }
+    click.echo(json.dumps(plan, indent=2))
+
+    if dry_run:
+        return
+
+    # Load puzzle data
+    click.echo("Loading puzzles from GitHub data source ...")
+    try:
+        all_games = load_games()
+    except Exception as exc:
+        raise click.ClickException(f"Failed to load puzzles: {exc}") from exc
+
+    if end > len(all_games):
+        click.echo(
+            f"Warning: requested end={end} but only {len(all_games)} puzzles available. "
+            f"Clamping to {len(all_games)}.",
+            err=True,
+        )
+        end = len(all_games)
+
+    games = all_games[start:end]
+    click.echo(f"Loaded {len(games)} puzzles (indices {start}–{end - 1}).\n")
+
+    # Build solver
+    client = endpoint.client()
+    solver_instance = _build_solver(solver, client, temperature=temperature)
+
+    # Traces directory
+    trace_dir = Path(traces) if traces else None
+    if trace_dir:
+        trace_dir.mkdir(parents=True, exist_ok=True)
+
+    # Run solver over puzzles
+    results: list[dict] = []
+    total_solved = 0
+    wall_start = time.time()
+
+    for idx, game in enumerate(games):
+        puzzle_num = start + idx
+        click.echo(f"--- Puzzle {puzzle_num} ({idx + 1}/{len(games)}) ---")
+
+        trace_path = trace_dir / f"puzzle_{puzzle_num:04d}.jsonl" if trace_dir else None
+
+        try:
+            solved_cats = solver_instance.play(game, trace_path=trace_path)
+        except Exception as exc:
+            logger.error("Solver crashed on puzzle %d: %s", puzzle_num, exc)
+            solved_cats = [False, False, False, False]
+
+        is_solved = all(solved_cats)
+        if is_solved:
+            total_solved += 1
+
+        n_correct = sum(solved_cats)
+        click.echo(
+            f"  Result: {'SOLVED' if is_solved else 'FAILED'}  "
+            f"({n_correct}/4 categories)  "
+            f"strikes={game.current_strikes}"
+        )
+
+        results.append(
+            {
+                "puzzle_id": puzzle_num,
+                "solved": is_solved,
+                "categories_solved": sum(solved_cats),
+                "strikes": game.current_strikes,
+            }
+        )
+
+        # Reset game state for next run (games are mutated in place)
+        game.reset()
+
+    wall_elapsed = time.time() - wall_start
+
+    # Summary
+    n = len(results)
+    solve_rate = total_solved / n if n else 0.0
+    click.echo(f"\n{'=' * 50}")
+    click.echo(f"  Solver:     {solver}")
+    click.echo(f"  Model:      {endpoint.model}")
+    click.echo(f"  Puzzles:    {n}")
+    click.echo(f"  Solved:     {total_solved}/{n}  ({solve_rate:.1%})")
+    click.echo(f"  Wall time:  {wall_elapsed:.1f}s")
+    click.echo(f"{'=' * 50}")
+
+    # Write results JSONL
+    if out:
+        out_path = Path(out)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_path, "w") as fh:
+            for r in results:
+                fh.write(json.dumps(r) + "\n")
+        click.echo(f"Results written to {out_path}")
+
+
+if __name__ == "__main__":
+    main()

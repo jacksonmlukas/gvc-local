@@ -1,8 +1,8 @@
 """Integration tests for the FastAPI app.
 
 These tests exercise the HTTP layer without a live vLLM backend.  The
-OpenAI client call inside the solver is mocked so we can verify routing,
-validation, monitoring wiring, and error handling.
+solver dispatch is mocked so we can verify routing, validation,
+monitoring wiring, and error handling in isolation.
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from gvc_local.serving.app import create_app
+from gvc_local.serving.models import GuessResult
 
 
 @pytest.fixture()
@@ -51,7 +52,7 @@ def test_metrics_empty(client: TestClient) -> None:
 
 
 # ---------------------------------------------------------------------------
-# POST /solve  — happy path with mocked vLLM
+# POST /solve  — happy path with mocked solver dispatch
 # ---------------------------------------------------------------------------
 
 VALID_WORDS = [
@@ -73,26 +74,25 @@ VALID_WORDS = [
     "AMBER",
 ]
 
-# Fake OpenAI-style response object returned by client.chat_raw().
-_FAKE_RESPONSE = MagicMock()
-_FAKE_RESPONSE.choices = [MagicMock()]
-_FAKE_RESPONSE.choices[0].message.content = (
-    '[{"words": ["BASS","TROUT","SALMON","COD"], "category": "Fish"},'
-    ' {"words": ["JAZZ","BLUES","ROCK","POP"], "category": "Music"},'
-    ' {"words": ["MARS","VENUS","SATURN","JUPITER"], "category": "Planets"},'
-    ' {"words": ["RUBY","PEARL","JADE","AMBER"], "category": "Names"}]'
-)
-_FAKE_RESPONSE.usage = MagicMock()
-_FAKE_RESPONSE.usage.prompt_tokens = 120
-_FAKE_RESPONSE.usage.completion_tokens = 80
-_FAKE_RESPONSE.usage.total_tokens = 200
+# Fake result dict matching the shape returned by _run_solver.
+_FAKE_SOLVER_RESULT = {
+    "puzzle_id": "test123",
+    "guesses": [
+        GuessResult(words=["BASS", "TROUT", "SALMON", "COD"], category="Fish", correct=True),
+        GuessResult(words=["JAZZ", "BLUES", "ROCK", "POP"], category="Music", correct=True),
+        GuessResult(words=["MARS", "VENUS", "SATURN", "JUPITER"], category="Planets", correct=True),
+        GuessResult(words=["RUBY", "PEARL", "JADE", "AMBER"], category="Names", correct=True),
+    ],
+    "solved": True,
+    "total_guesses": 4,
+    "latency_ms": 1234.56,
+    "token_usage": {"prompt_tokens": 120, "completion_tokens": 80, "total_tokens": 200},
+}
 
 
-@patch("gvc_local.serving.app.EndpointConfig.client")
-def test_solve_happy_path(mock_client_factory: MagicMock, client: TestClient) -> None:
-    mock_client = MagicMock()
-    mock_client.chat_raw.return_value = _FAKE_RESPONSE
-    mock_client_factory.return_value = mock_client
+@patch("gvc_local.serving.app._run_solver")
+def test_solve_happy_path(mock_run_solver: MagicMock, client: TestClient) -> None:
+    mock_run_solver.return_value = _FAKE_SOLVER_RESULT
 
     resp = client.post("/solve", json={"words": VALID_WORDS, "solver": "gvc"})
     assert resp.status_code == 200
@@ -128,11 +128,9 @@ def test_solve_rejects_invalid_solver(client: TestClient) -> None:
 # ---------------------------------------------------------------------------
 
 
-@patch("gvc_local.serving.app.EndpointConfig.client")
-def test_solve_backend_error(mock_client_factory: MagicMock, client: TestClient) -> None:
-    mock_client = MagicMock()
-    mock_client.chat_raw.side_effect = ConnectionError("vLLM is down")
-    mock_client_factory.return_value = mock_client
+@patch("gvc_local.serving.app._run_solver")
+def test_solve_backend_error(mock_run_solver: MagicMock, client: TestClient) -> None:
+    mock_run_solver.side_effect = ConnectionError("vLLM is down")
 
     resp = client.post("/solve", json={"words": VALID_WORDS, "solver": "gvc"})
     assert resp.status_code == 502
@@ -145,23 +143,20 @@ def test_solve_backend_error(mock_client_factory: MagicMock, client: TestClient)
 
 
 # ---------------------------------------------------------------------------
-# POST /solve  — unparseable model output
+# POST /solve  — solver returns unsolved
 # ---------------------------------------------------------------------------
 
 
-@patch("gvc_local.serving.app.EndpointConfig.client")
-def test_solve_unparseable_output(mock_client_factory: MagicMock, client: TestClient) -> None:
-    fake_resp = MagicMock()
-    fake_resp.choices = [MagicMock()]
-    fake_resp.choices[0].message.content = "I don't know how to solve this puzzle."
-    fake_resp.usage = MagicMock()
-    fake_resp.usage.prompt_tokens = 50
-    fake_resp.usage.completion_tokens = 20
-    fake_resp.usage.total_tokens = 70
-
-    mock_client = MagicMock()
-    mock_client.chat_raw.return_value = fake_resp
-    mock_client_factory.return_value = mock_client
+@patch("gvc_local.serving.app._run_solver")
+def test_solve_unsolved(mock_run_solver: MagicMock, client: TestClient) -> None:
+    mock_run_solver.return_value = {
+        "puzzle_id": "test456",
+        "guesses": [],
+        "solved": False,
+        "total_guesses": 0,
+        "latency_ms": 500.0,
+        "token_usage": {},
+    }
 
     resp = client.post("/solve", json={"words": VALID_WORDS, "solver": "snap_gvc"})
     assert resp.status_code == 200

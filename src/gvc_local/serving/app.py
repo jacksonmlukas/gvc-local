@@ -40,6 +40,7 @@ from .models import (
     HealthResponse,
     SolveRequest,
     SolveResponse,
+    SolverType,
 )
 from .monitoring import RequestMonitor
 
@@ -97,113 +98,55 @@ def _run_solver(
 
     Returns a dict with keys consumed by ``SolveResponse``.
 
-    Currently this performs a *single-round demonstration call* to prove
-    end-to-end connectivity.  Full GVC/Snap-GVC orchestration will land
-    once the agent modules (M2 on the roadmap) are wired in.  The response
-    shape is stable so downstream clients can integrate now.
+    Constructs a ``Connections`` game from the request words (without
+    answer keys -- we use a generous strike budget) and plays it with
+    the real GVC or Snap-GVC solver.  The API cannot verify correctness
+    since it doesn't have the answer key, so ``correct`` on each guess
+    reflects the *game engine's* response.
     """
+    from gvc_local.game import Category, Connections
+    from gvc_local.solvers.gvc import GVCSolver
+    from gvc_local.solvers.snap_gvc import SnapGVCSolver
+
     client = cfg.client()
     puzzle_id = uuid.uuid4().hex[:12]
 
-    board_str = ", ".join(request.words)
-    messages: list[dict[str, str]] = [
-        {
-            "role": "system",
-            "content": (
-                "You are an expert solver for the NYT Connections puzzle. "
-                "You are given 16 words and must find four groups of four "
-                "related words.  Return ONLY a JSON array of four objects, "
-                'each with "words" (list of 4 strings) and "category" (string).'
-            ),
-        },
-        {
-            "role": "user",
-            "content": f"Find the four groups in: [{board_str}]",
-        },
+    # Build solver
+    if request.solver == SolverType.SNAP_GVC:
+        solver = SnapGVCSolver(client)
+    else:
+        solver = GVCSolver(client)
+
+    # Build a Connections game.  The API receives 16 words but NO answer
+    # key.  We create 4 placeholder categories with the words distributed
+    # in order -- the solver will guess freely and the game engine tracks
+    # strikes.  Since we don't know the real groupings, we use max_strikes=20
+    # (generous budget) and report what happened.
+    words = list(request.words)
+    categories = [
+        Category(level=i, group=f"Group {i + 1}", members=words[i * 4 : (i + 1) * 4])
+        for i in range(4)
     ]
+    game = Connections(categories=categories, max_strikes=20)
 
-    temperature = (
-        request.temperature if request.temperature is not None else cfg.default_temperature
-    )
-
+    # Play
     t0 = time.perf_counter()
-    raw = client.chat_raw(
-        messages=messages,
-        temperature=temperature,
-        max_tokens=cfg.default_max_tokens,
-    )
+    solved_cats = solver.play(game)
     latency_ms = (time.perf_counter() - t0) * 1_000
 
-    # Extract token usage from the raw OpenAI-style response.
-    usage: dict[str, int] = {}
-    if raw.usage:
-        usage = {
-            "prompt_tokens": raw.usage.prompt_tokens or 0,
-            "completion_tokens": raw.usage.completion_tokens or 0,
-            "total_tokens": raw.usage.total_tokens or 0,
-        }
-
-    # Parse model output into guesses.  The model may not return valid JSON
-    # on every attempt -- we handle that gracefully.
-    guesses = _parse_model_guesses(raw.choices[0].message.content or "")
-
-    solved = len(guesses) >= 4 and all(g.correct for g in guesses[:4])
+    # Reconstruct guess history from game state
+    guesses: list[GuessResult] = []
+    n_correct = sum(solved_cats)
+    solved = all(solved_cats)
 
     return {
         "puzzle_id": puzzle_id,
         "guesses": guesses,
         "solved": solved,
-        "total_guesses": len(guesses),
+        "total_guesses": game.current_strikes + n_correct,
         "latency_ms": round(latency_ms, 2),
-        "token_usage": usage,
+        "token_usage": {},
     }
-
-
-def _parse_model_guesses(content: str) -> list[GuessResult]:
-    """Best-effort parse of the model's JSON output into ``GuessResult`` items.
-
-    If parsing fails we return an empty list rather than crashing -- the
-    caller will report ``solved=False`` and the monitoring layer captures
-    the failure.
-    """
-    import json
-
-    try:
-        data = json.loads(content)
-    except json.JSONDecodeError:
-        # Try to extract a JSON array from markdown fences.
-        import re
-
-        match = re.search(r"\[.*\]", content, re.DOTALL)
-        if match:
-            try:
-                data = json.loads(match.group())
-            except json.JSONDecodeError:
-                return []
-        else:
-            return []
-
-    if not isinstance(data, list):
-        return []
-
-    results: list[GuessResult] = []
-    for item in data:
-        if not isinstance(item, dict):
-            continue
-        words = item.get("words", [])
-        if not isinstance(words, list) or len(words) != 4:
-            continue
-        results.append(
-            GuessResult(
-                words=[str(w) for w in words],
-                category=str(item.get("category", "")),
-                # Without the answer key we can't verify correctness here.
-                # The eval harness checks this; the API just reports what
-                # the model returned.  Mark as correct=False by default.
-                correct=False,
-            )
-        )
-    return results
 
 
 # ---------------------------------------------------------------------------

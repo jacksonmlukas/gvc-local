@@ -34,12 +34,12 @@ from __future__ import annotations
 import logging
 import sys
 
-import click
-
 # Ensure the project root is importable when running as a standalone script.
 # When installed via pip/setuptools this is unnecessary, but during development
 # you may run ``python scripts/build_rag_index.py`` directly.
 from pathlib import Path
+
+import click
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT / "src") not in sys.path:
@@ -116,7 +116,7 @@ def main(
         nprobe=nprobe,
     )
 
-    click.echo(f"Building RAG index ...")
+    click.echo("Building RAG index ...")
     click.echo(f"  Puzzles : {puzzles}")
     click.echo(f"  Traces  : {traces or '(none)'}")
     click.echo(f"  Output  : {output}")
