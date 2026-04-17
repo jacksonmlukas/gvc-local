@@ -65,9 +65,7 @@ MODEL_MAP: dict[str, dict[str, str]] = {
 MODEL_CHOICES = list(MODEL_MAP["local"])
 
 
-def _resolve_endpoint(
-    model_key: str, provider: str, base_url: str | None
-) -> EndpointConfig:
+def _resolve_endpoint(model_key: str, provider: str, base_url: str | None) -> EndpointConfig:
     """Map a friendly model name + provider to an ``EndpointConfig``."""
     try:
         factory_name = MODEL_MAP[provider][model_key]
