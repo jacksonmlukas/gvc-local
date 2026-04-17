@@ -12,8 +12,8 @@ Key ideas:
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 import numpy as np
 
@@ -39,7 +39,7 @@ def stratified_sample(
         by_stratum.setdefault(r.strata, []).append(r)
 
     picked: list[RunResult] = []
-    for stratum, items in by_stratum.items():
+    for _stratum, items in by_stratum.items():
         k = min(per_stratum, len(items))
         idx = rng.choice(len(items), size=k, replace=False)
         picked.extend(items[i] for i in idx)

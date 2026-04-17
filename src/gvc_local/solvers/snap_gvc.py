@@ -20,11 +20,10 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any
 
 from gvc_local.agents.snap_guesser import SnapGuesserAgent
 from gvc_local.endpoint import Client
-from gvc_local.game import Connections, GameOverException
+from gvc_local.game import Connections, GameOverError
 from gvc_local.rag.retriever import PuzzleRetriever
 from gvc_local.solvers.base import BaseSolver, SolverMetrics, TraceRecorder
 from gvc_local.solvers.gvc import GVCSolver, _grounding_check
@@ -172,7 +171,7 @@ class SnapGVCSolver(BaseSolver):
                 # Submit to game engine
                 try:
                     result = game.category_guess_check(guess_words)
-                except GameOverException:
+                except GameOverError:
                     logger.warning("[SnapGVC] game over during conservative phase")
                     break
 
@@ -255,7 +254,7 @@ class SnapGVCSolver(BaseSolver):
                 # Submit to game engine
                 try:
                     result = game.category_guess_check(guess_words)
-                except GameOverException:
+                except GameOverError:
                     logger.warning("[SnapGVC] game over during snap phase")
                     break
 

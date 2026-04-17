@@ -93,7 +93,7 @@ class TraceRecord:
 
     # ------------------------------------------------------------------
     @classmethod
-    def from_dict(cls, raw: dict) -> "TraceRecord":
+    def from_dict(cls, raw: dict) -> TraceRecord:
         """Construct from a parsed JSON dict, validating required keys."""
         return cls(
             puzzle_id=raw["puzzle_id"],

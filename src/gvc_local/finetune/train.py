@@ -30,7 +30,7 @@ from transformers import (
     BitsAndBytesConfig,
     TrainingArguments,
 )
-from trl import SFTTrainer, DataCollatorForCompletionOnlyLM
+from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 logger = logging.getLogger(__name__)
 
@@ -99,7 +99,7 @@ class FinetuneConfig:
     wandb: WandbSettings = field(default_factory=WandbSettings)
 
     @classmethod
-    def from_yaml(cls, path: str | Path) -> "FinetuneConfig":
+    def from_yaml(cls, path: str | Path) -> FinetuneConfig:
         """Load configuration from a YAML file."""
         with open(path) as fh:
             raw = yaml.safe_load(fh)

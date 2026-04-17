@@ -23,7 +23,6 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Any
 
 from gvc_local.agents.base import Agent
 from gvc_local.endpoint import Client

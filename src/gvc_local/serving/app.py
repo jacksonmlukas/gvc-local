@@ -25,8 +25,9 @@ import logging
 import os
 import time
 import uuid
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import Any, AsyncIterator
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -39,7 +40,6 @@ from .models import (
     HealthResponse,
     SolveRequest,
     SolveResponse,
-    SolverType,
 )
 from .monitoring import RequestMonitor
 

@@ -19,12 +19,13 @@ from __future__ import annotations
 import json
 import logging
 import time
-from dataclasses import dataclass, field, asdict
+from collections.abc import Sequence
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Protocol, Sequence
+from typing import Any, Protocol
 
-from ..eval_harness import RunResult, stratified_sample, summarize, bootstrap_ci
-from .tracking import ExperimentTracker, wandb_available
+from ..eval_harness import RunResult, stratified_sample, summarize
+from .tracking import ExperimentTracker
 
 try:
     import wandb as _wandb  # type: ignore[import-untyped]

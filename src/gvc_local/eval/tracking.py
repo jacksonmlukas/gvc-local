@@ -20,9 +20,9 @@ Typical usage::
 from __future__ import annotations
 
 import logging
-import sys
+from collections.abc import Sequence
 from dataclasses import asdict
-from typing import Any, Sequence
+from typing import Any
 
 from ..eval_harness import RunResult
 
@@ -229,7 +229,7 @@ class ExperimentTracker:
     # Context manager
     # ------------------------------------------------------------------
 
-    def __enter__(self) -> "ExperimentTracker":
+    def __enter__(self) -> ExperimentTracker:
         return self
 
     def __exit__(self, *exc: Any) -> None:

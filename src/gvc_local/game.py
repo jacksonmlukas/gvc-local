@@ -4,7 +4,7 @@ Tries to import from the upstream ``rsallms.game`` package first. If the
 upstream repo is not installed (e.g. in a standalone deployment), falls back
 to a minimal local implementation that provides the same public API:
 
-    Connections, Category, GameOverException, load_games, sample_game
+    Connections, Category, GameOverError, load_games, sample_game
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ try:
     from rsallms.game import (  # type: ignore[import-untyped]
         Category,
         Connections,
-        GameOverException,
+        GameOverError,
         load_games,
         load_json_to_connections,
         sample_game,
@@ -25,9 +25,7 @@ except ImportError:
     # -----------------------------------------------------------------
     import json
     import random
-    from dataclasses import asdict, dataclass
-    from pathlib import Path
-    from typing import Any
+    from dataclasses import dataclass
 
     import requests
 
@@ -36,7 +34,7 @@ except ImportError:
         "refs/heads/main/connections.json"
     )
 
-    class GameOverException(Exception):  # type: ignore[no-redef]
+    class GameOverError(Exception):  # type: ignore[no-redef]
         """Raised when the maximum number of strikes has been reached."""
 
     @dataclass
@@ -50,7 +48,7 @@ except ImportError:
         def matches(self, words: list[str]) -> bool:
             return set(words) == set(self.members)
 
-        def diff(self, other_category: "Category") -> int:
+        def diff(self, other_category: Category) -> int:
             return len(set(self.members).symmetric_difference(set(other_category.members)))
 
     class Connections:  # type: ignore[no-redef]
@@ -95,7 +93,7 @@ except ImportError:
 
         def category_guess_check(self, words: list[str]) -> Category | None:
             if self.current_strikes >= self._max_strikes:
-                raise GameOverException("Max strikes reached!")
+                raise GameOverError("Max strikes reached!")
             for i, group in enumerate(self.categories):
                 if group.matches(words):
                     return self.categories.pop(i)
@@ -145,7 +143,7 @@ except ImportError:
 __all__ = [
     "Category",
     "Connections",
-    "GameOverException",
+    "GameOverError",
     "load_games",
     "load_json_to_connections",
     "sample_game",

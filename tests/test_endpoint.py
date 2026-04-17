@@ -1,6 +1,6 @@
 """Smoke tests for the endpoint wrapper. No live model calls."""
 
-from gvc_local.endpoint import EndpointConfig, LLAMA_31_8B, QWEN_25_7B
+from gvc_local.endpoint import LLAMA_31_8B, QWEN_25_7B, EndpointConfig
 
 
 def test_llama_constructor():

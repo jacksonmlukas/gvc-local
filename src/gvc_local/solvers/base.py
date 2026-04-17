@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from gvc_local.game import Connections, GameOverException
+from gvc_local.game import Connections, GameOverError
 
 logger = logging.getLogger(__name__)
 
@@ -177,7 +177,7 @@ class BaseSolver(abc.ABC):
             # Validate the guess against the game engine
             try:
                 result = game.category_guess_check(guess_words)
-            except GameOverException:
+            except GameOverError:
                 logger.warning("[Solver] game over (max strikes reached)")
                 if recorder:
                     recorder.record("game_over", {"reason": "max_strikes"})

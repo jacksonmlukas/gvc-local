@@ -13,7 +13,7 @@ Typical usage:
     print(result.format_for_prompt())
 """
 
-from gvc_local.rag.indexer import build_index, IndexConfig
+from gvc_local.rag.indexer import IndexConfig, build_index
 from gvc_local.rag.retriever import PuzzleRetriever, RetrievalResult
 
 __all__ = [

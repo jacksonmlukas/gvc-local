@@ -26,9 +26,10 @@ from __future__ import annotations
 import logging
 import re
 import unicodedata
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from difflib import SequenceMatcher
-from typing import Any, Callable, Sequence
+from typing import Any
 
 from ..eval_harness import RunResult
 

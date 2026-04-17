@@ -20,7 +20,6 @@ from typing import Any
 
 from openai import OpenAI
 
-
 # Known model strings served via vLLM. Keep these in sync with the Docker/k8s launch config.
 LLAMA_31_8B = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 LLAMA_33_70B = "meta-llama/Meta-Llama-3.3-70B-Instruct"
@@ -41,19 +40,19 @@ class EndpointConfig:
 
     # --- Convenience constructors ----------------------------------------
     @classmethod
-    def llama31_8b(cls, **overrides: Any) -> "EndpointConfig":
+    def llama31_8b(cls, **overrides: Any) -> EndpointConfig:
         return cls(model=LLAMA_31_8B, **overrides)
 
     @classmethod
-    def llama33_70b(cls, **overrides: Any) -> "EndpointConfig":
+    def llama33_70b(cls, **overrides: Any) -> EndpointConfig:
         return cls(model=LLAMA_33_70B, **overrides)
 
     @classmethod
-    def qwen25_7b(cls, **overrides: Any) -> "EndpointConfig":
+    def qwen25_7b(cls, **overrides: Any) -> EndpointConfig:
         return cls(model=QWEN_25_7B, **overrides)
 
     # --- Client factory ---------------------------------------------------
-    def client(self) -> "Client":
+    def client(self) -> Client:
         return Client(self)
 
 

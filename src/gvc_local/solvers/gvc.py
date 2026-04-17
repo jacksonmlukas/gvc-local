@@ -18,12 +18,11 @@ from __future__ import annotations
 
 import logging
 from collections import deque
-from typing import Any
 
 from gvc_local.agents.guesser import GuesserAgent
 from gvc_local.agents.validator import ValidatorAgent
 from gvc_local.endpoint import Client
-from gvc_local.rag.retriever import PuzzleRetriever, RetrievalResult
+from gvc_local.rag.retriever import PuzzleRetriever
 from gvc_local.solvers.base import BaseSolver, SolverMetrics
 
 logger = logging.getLogger(__name__)

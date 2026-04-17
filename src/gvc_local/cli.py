@@ -17,7 +17,6 @@ import click
 
 from .endpoint import EndpointConfig
 
-
 MODEL_MAP = {
     "llama-3.1-8b": EndpointConfig.llama31_8b,
     "llama-3.3-70b": EndpointConfig.llama33_70b,

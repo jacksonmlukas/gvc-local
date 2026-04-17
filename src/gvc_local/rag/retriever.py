@@ -31,13 +31,12 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from gvc_local.rag.indexer import (
-    DOC_TYPE_PUZZLE,
-    DOC_TYPE_TRACE,
-    EMBED_MODEL,
-    IndexConfig,
     _CONFIG_FILE,
     _INDEX_FILE,
     _META_FILE,
+    DOC_TYPE_PUZZLE,
+    DOC_TYPE_TRACE,
+    IndexConfig,
 )
 
 logger = logging.getLogger(__name__)
@@ -61,7 +60,7 @@ class ScoredPuzzle:
     def format(self) -> str:
         """Human-readable single-puzzle summary for prompt injection."""
         cat_lines = []
-        for cat, lvl in zip(self.categories, self.levels):
+        for cat, lvl in zip(self.categories, self.levels, strict=False):
             cat_lines.append(f"  - {cat} (difficulty {lvl})")
         cats = "\n".join(cat_lines)
         words = ", ".join(self.words)
@@ -321,7 +320,7 @@ class PuzzleRetriever:
             scores, ids = self._search_with_postfilter(query_vec, subset_ids, k_actual, doc_type)
 
         results: list[tuple[int, float]] = []
-        for score, vid in zip(scores[0], ids[0]):
+        for score, vid in zip(scores[0], ids[0], strict=False):
             if vid == -1:
                 continue
             results.append((int(vid), float(score)))
@@ -342,7 +341,7 @@ class PuzzleRetriever:
 
         filtered_scores: list[float] = []
         filtered_ids: list[int] = []
-        for score, vid in zip(all_scores[0], all_ids[0]):
+        for score, vid in zip(all_scores[0], all_ids[0], strict=False):
             if vid == -1:
                 continue
             if int(vid) in subset_set:
