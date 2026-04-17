@@ -7,6 +7,7 @@ validation, monitoring wiring, and error handling.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -16,9 +17,10 @@ from gvc_local.serving.app import create_app
 
 
 @pytest.fixture()
-def client() -> TestClient:
+def client() -> Iterator[TestClient]:
     app = create_app()
-    return TestClient(app)
+    with TestClient(app) as c:
+        yield c
 
 
 # ---------------------------------------------------------------------------
