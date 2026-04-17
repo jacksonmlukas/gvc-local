@@ -2,17 +2,21 @@
 """CLI entry point for running evaluations.
 
 Supports both *Connections* puzzles (the default) and *GAIA* benchmark tasks
-through a unified interface.
+through a unified interface.  Works with local vLLM, Groq, or Together AI.
 
 Usage examples::
 
-    # Connections evaluation (basic solver, Llama 3.1 8B, puzzles 0–50)
+    # Connections evaluation via Groq (free, no GPU)
     python scripts/run_eval.py --solver basic --model llama-3.1-8b \\
-        --start 0 --end 50 --out results/basic_llama8b.jsonl
+        --provider groq --start 0 --end 50 --out results/basic_llama8b.jsonl
+
+    # Together AI inference
+    python scripts/run_eval.py --solver snap_gvc --model llama-3.1-8b \\
+        --provider together --out results/snap_together.jsonl
 
     # GAIA Level-1 evaluation
     python scripts/run_eval.py --benchmark gaia --solver basic \\
-        --model llama-3.1-8b --out results/gaia_l1.jsonl
+        --model llama-3.1-8b --provider groq --out results/gaia_l1.jsonl
 
     # Disable W&B tracking
     python scripts/run_eval.py --solver cot --model qwen-2.5-7b --no-wandb
@@ -26,6 +30,7 @@ from __future__ import annotations
 import json
 import logging
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 import click
@@ -45,14 +50,30 @@ from gvc_local.eval_harness import summarize  # noqa: E402
 logger = logging.getLogger("gvc_local.eval")
 
 # ---------------------------------------------------------------------------
-# Model registry (mirrors cli.py)
+# Model / provider registry (mirrors cli.py)
 # ---------------------------------------------------------------------------
 
+PROVIDERS = ("local", "groq", "together")
+
 MODEL_MAP = {
-    "llama-3.1-8b": EndpointConfig.llama31_8b,
-    "llama-3.3-70b": EndpointConfig.llama33_70b,
-    "qwen-2.5-7b": EndpointConfig.qwen25_7b,
+    "local": {
+        "llama-3.1-8b": EndpointConfig.llama31_8b,
+        "llama-3.3-70b": EndpointConfig.llama33_70b,
+        "qwen-2.5-7b": EndpointConfig.qwen25_7b,
+    },
+    "groq": {
+        "llama-3.1-8b": EndpointConfig.groq_llama8b,
+        "llama-3.3-70b": EndpointConfig.groq_llama70b,
+        "qwen-2.5-7b": EndpointConfig.groq_qwen7b,
+    },
+    "together": {
+        "llama-3.1-8b": EndpointConfig.together_llama8b,
+        "llama-3.3-70b": EndpointConfig.together_llama70b,
+        "qwen-2.5-7b": EndpointConfig.together_qwen7b,
+    },
 }
+
+MODEL_CHOICES = list(MODEL_MAP["local"])
 
 
 # ---------------------------------------------------------------------------
@@ -63,7 +84,7 @@ MODEL_MAP = {
 def _make_connections_solver(
     solver_name: str,
     endpoint: EndpointConfig,
-) -> callable:
+) -> Callable:
     """Create a Connections puzzle solver callable.
 
     Returns a function ``game -> RunResult`` suitable for
@@ -135,7 +156,7 @@ def _make_connections_solver(
 def _make_gaia_solver(
     solver_name: str,
     endpoint: EndpointConfig,
-) -> callable:
+) -> Callable:
     """Create a GAIA Q&A solver callable.
 
     Returns a function ``question -> answer`` suitable for
@@ -176,6 +197,7 @@ def _load_yaml_config(path: str) -> dict:
 def _build_eval_config(
     solver: str,
     model_key: str,
+    provider: str,
     start: int,
     end: int,
     output: str,
@@ -185,7 +207,7 @@ def _build_eval_config(
     per_stratum: int,
 ) -> EvalConfig:
     """Build an EvalConfig from CLI arguments."""
-    model_id = MODEL_MAP[model_key]().model  # resolve to full HF model string
+    model_id = MODEL_MAP[provider][model_key]().model
     return EvalConfig(
         solver=solver,
         model=model_id,
@@ -218,9 +240,15 @@ def _build_eval_config(
 )
 @click.option(
     "--model",
-    type=click.Choice(list(MODEL_MAP)),
+    type=click.Choice(MODEL_CHOICES),
     default="llama-3.1-8b",
     help="Model to evaluate.",
+)
+@click.option(
+    "--provider",
+    type=click.Choice(PROVIDERS),
+    default="local",
+    help="Inference provider (local vLLM, groq, or together).",
 )
 @click.option("--start", type=int, default=0, help="First puzzle index (inclusive).")
 @click.option("--end", type=int, default=10, help="Last puzzle index (exclusive).")
@@ -239,8 +267,8 @@ def _build_eval_config(
 @click.option(
     "--base-url",
     type=str,
-    default="http://localhost:8000/v1",
-    help="vLLM OpenAI-compatible endpoint URL.",
+    default=None,
+    help="Override endpoint URL (mainly for local vLLM).",
 )
 @click.option(
     "--out",
@@ -271,11 +299,12 @@ def main(
     benchmark: str,
     solver: str,
     model: str,
+    provider: str,
     start: int,
     end: int,
     gaia_level: int,
     gaia_max_tasks: int | None,
-    base_url: str,
+    base_url: str | None,
     out: str,
     wandb_project: str,
     wandb_run_name: str | None,
@@ -301,6 +330,7 @@ def main(
         benchmark = cfg_data.get("benchmark", benchmark)
         solver = cfg_data.get("solver", solver)
         model = cfg_data.get("model", model)
+        provider = cfg_data.get("provider", provider)
         start = cfg_data.get("puzzle_start", start)
         end = cfg_data.get("puzzle_end", end)
         out = cfg_data.get("output_path", out)
@@ -319,8 +349,8 @@ def main(
     plan = {
         "benchmark": benchmark,
         "solver": solver,
+        "provider": provider,
         "model": model,
-        "base_url": base_url,
         "wandb_project": effective_wandb,
         "output": out,
     }
@@ -335,14 +365,18 @@ def main(
         return
 
     # Endpoint
-    endpoint_factory = MODEL_MAP[model]
-    endpoint = endpoint_factory(base_url=base_url)
+    endpoint_factory = MODEL_MAP[provider][model]
+    kwargs = {}
+    if provider == "local" and base_url:
+        kwargs["base_url"] = base_url
+    endpoint = endpoint_factory(**kwargs)
 
     # Dispatch by benchmark
     if benchmark == "connections":
         _run_connections(
             solver=solver,
             model=model,
+            provider=provider,
             endpoint=endpoint,
             start=start,
             end=end,
@@ -375,6 +409,7 @@ def main(
 def _run_connections(
     solver: str,
     model: str,
+    provider: str,
     endpoint: EndpointConfig,
     start: int,
     end: int,
@@ -400,7 +435,7 @@ def _run_connections(
             {"puzzle_id": i, "category": "placeholder", "board": []} for i in range(max(end, 100))
         ]
 
-    model_id = MODEL_MAP[model]().model
+    model_id = MODEL_MAP[provider][model]().model
     eval_config = EvalConfig(
         solver=solver,
         model=model_id,

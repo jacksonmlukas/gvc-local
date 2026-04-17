@@ -2,11 +2,17 @@
 
 Usage::
 
-    # Solve puzzles 0–9 with Snap-GVC on Llama 3.1 8B
+    # Solve puzzles 0–9 with Snap-GVC on Llama 3.1 8B (local vLLM)
     gvc-local snap_gvc llama-3.1-8b --start 0 --end 10
 
+    # Use Groq free-tier inference (no GPU needed)
+    gvc-local snap_gvc llama-3.1-8b --provider groq
+
+    # Use Together AI
+    gvc-local gvc llama-3.1-8b --provider together
+
     # Save traces for fine-tuning
-    gvc-local gvc llama-3.1-8b --start 0 --end 50 --traces data/traces/
+    gvc-local gvc llama-3.1-8b --provider groq --traces data/traces/
 
     # Point at a custom vLLM endpoint
     gvc-local snap_gvc qwen-2.5-7b --base-url http://gpu-box:8000/v1
@@ -31,21 +37,49 @@ from gvc_local.solvers.base import BaseSolver
 logger = logging.getLogger("gvc_local.cli")
 
 # ---------------------------------------------------------------------------
-# Model registry
+# Model / provider registry
 # ---------------------------------------------------------------------------
 
-MODEL_MAP: dict[str, str] = {
-    "llama-3.1-8b": "llama31_8b",
-    "llama-3.3-70b": "llama33_70b",
-    "qwen-2.5-7b": "qwen25_7b",
+PROVIDERS = ("local", "groq", "together")
+
+# Maps (provider, friendly-model-name) → EndpointConfig factory method name.
+# The "local" provider uses the base factory + a user-supplied --base-url.
+MODEL_MAP: dict[str, dict[str, str]] = {
+    "local": {
+        "llama-3.1-8b": "llama31_8b",
+        "llama-3.3-70b": "llama33_70b",
+        "qwen-2.5-7b": "qwen25_7b",
+    },
+    "groq": {
+        "llama-3.1-8b": "groq_llama8b",
+        "llama-3.3-70b": "groq_llama70b",
+        "qwen-2.5-7b": "groq_qwen7b",
+    },
+    "together": {
+        "llama-3.1-8b": "together_llama8b",
+        "llama-3.3-70b": "together_llama70b",
+        "qwen-2.5-7b": "together_qwen7b",
+    },
 }
 
+MODEL_CHOICES = list(MODEL_MAP["local"])
 
-def _resolve_endpoint(model_key: str, base_url: str) -> EndpointConfig:
-    """Map a friendly model name to an ``EndpointConfig``."""
-    factory_name = MODEL_MAP[model_key]
+
+def _resolve_endpoint(
+    model_key: str, provider: str, base_url: str | None
+) -> EndpointConfig:
+    """Map a friendly model name + provider to an ``EndpointConfig``."""
+    try:
+        factory_name = MODEL_MAP[provider][model_key]
+    except KeyError as exc:
+        raise click.ClickException(
+            f"Unknown provider/model combo: provider={provider!r}, model={model_key!r}"
+        ) from exc
     factory = getattr(EndpointConfig, factory_name)
-    return factory(base_url=base_url)
+    # Only pass base_url for local provider (cloud providers set their own).
+    if provider == "local" and base_url:
+        return factory(base_url=base_url)
+    return factory()
 
 
 # ---------------------------------------------------------------------------
@@ -65,7 +99,10 @@ def _build_solver(
         kwargs["guesser_temperature"] = temperature
         kwargs["validator_temperature"] = temperature
 
-    if solver_name == "gvc":
+    if solver_name in ("basic", "cot"):
+        # basic/cot use GVC with a single internal retry — no consensus loop.
+        return GVCSolver(client, max_internal_retries=1, **kwargs)
+    elif solver_name == "gvc":
         return GVCSolver(client, **kwargs)
     elif solver_name == "snap_gvc":
         return SnapGVCSolver(client, **kwargs)
@@ -79,15 +116,21 @@ def _build_solver(
 
 
 @click.command(context_settings={"help_option_names": ["-h", "--help"]})
-@click.argument("solver", type=click.Choice(["gvc", "snap_gvc"]))
-@click.argument("model", type=click.Choice(list(MODEL_MAP)))
+@click.argument("solver", type=click.Choice(["basic", "cot", "gvc", "snap_gvc"]))
+@click.argument("model", type=click.Choice(MODEL_CHOICES))
 @click.option("--start", type=int, default=0, help="First puzzle index (inclusive).")
 @click.option("--end", type=int, default=10, help="Last puzzle index (exclusive).")
 @click.option(
+    "--provider",
+    type=click.Choice(PROVIDERS),
+    default="local",
+    help="Inference provider (local vLLM, groq, or together).",
+)
+@click.option(
     "--base-url",
     type=str,
-    default="http://localhost:8000/v1",
-    help="vLLM OpenAI-compatible endpoint URL.",
+    default=None,
+    help="Override endpoint URL (mainly for local vLLM). Cloud providers set this automatically.",
 )
 @click.option(
     "--temperature",
@@ -114,7 +157,8 @@ def main(
     model: str,
     start: int,
     end: int,
-    base_url: str,
+    provider: str,
+    base_url: str | None,
     temperature: float | None,
     traces: str | None,
     out: str | None,
@@ -128,12 +172,13 @@ def main(
         datefmt="%H:%M:%S",
     )
 
-    endpoint = _resolve_endpoint(model, base_url)
+    endpoint = _resolve_endpoint(model, provider, base_url)
 
     plan = {
         "solver": solver,
+        "provider": provider,
         "model": endpoint.model,
-        "base_url": base_url,
+        "base_url": endpoint.base_url,
         "puzzle_range": f"[{start}, {end})",
         "temperature": temperature or endpoint.default_temperature,
         "traces": traces,
