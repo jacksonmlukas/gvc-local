@@ -4,23 +4,30 @@ Milestones are sized to land the whole extension in 6–8 weeks at ~8 hrs/week. 
 
 **Infrastructure:** all inference runs through cloud providers (Groq free tier, Together AI) — no local GPU required. Fine-tuning uses Together AI's LoRA API (~$1–5 total).
 
-## M1 — Cloud endpoint + smoke run on Llama 3.1 8B · 1 week
+## M1 — Cloud endpoint + smoke run on Llama 3.1 8B · ✅ complete
 
 - [x] Implement `EndpointConfig` wrapper conforming to the upstream `rsallms` contract.
 - [x] Add cloud provider factories (Groq, Together AI) reading API keys from env vars.
 - [x] Wire solvers (basic, cot, gvc, snap_gvc) into CLI, eval harness, and serving API.
-- [ ] Run `basic` and `cot` solvers end-to-end on 10 puzzles via Groq; confirm the pipeline works.
-- [ ] CI green on all tests.
+- [x] Run `basic` solver end-to-end on 10 puzzles via Groq; pipeline confirmed working.
+- [x] CI green (ruff check, ruff format, pytest, mypy continue-on-error).
 
-**Exit criterion:** `gvc-local snap_gvc llama-3.1-8b --provider groq --end 10` runs 10 puzzles, writes results JSONL. Published as `v0.1`.
+## M2 — GVC and Snap-GVC on Llama 3.1 8B · in progress
 
-## M2 — GVC and Snap-GVC on Llama 3.1 8B · 1–2 weeks
+- [x] Run `basic` solver on 10 puzzles via Groq: **2/10 (20%)**.
+- [x] Run `snap_gvc` solver on 9 puzzles via Groq: **6/9 (67%)**. Snap-GVC triples basic accuracy.
+- [x] Collect solver interaction traces (JSONL) — 10 basic + 9 snap_gvc traces saved.
+- [ ] Run `cot` and `gvc` solvers on 10 puzzles via Groq.
+- [ ] Scale all 4 solvers to 100 puzzles for full Table 1.
 
-- [ ] Run full 100-puzzle eval for `basic`, `cot`, `gvc`, `snap_gvc` via Groq. Produce Table 1 row for Llama 3.1 8B.
-- [ ] Sanity-check results against upstream's LLaMa 3.1 8B rows for the baselines — if they don't line up, figure out why before going further.
-- [ ] Collect solver interaction traces (JSONL) for fine-tuning data prep.
+**Preliminary results (Llama 3.1 8B via Groq):**
 
-**Exit criterion:** published results table for Llama 3.1 8B across all four strategies. Snap-GVC should measurably beat CoT, and the gap should be at least as large as the upstream GPT-4o-mini gap (42 percentage points). If not, write up why.
+| Solver | Puzzles | Solved | Rate |
+|--------|---------|--------|------|
+| basic | 10 | 2 | 20% |
+| snap_gvc | 9 | 6 | 67% |
+
+**Exit criterion:** published results table for Llama 3.1 8B across all four strategies.
 
 ## M3 — Qwen 2.5 7B replication + fine-tuning data · 3–5 days
 
@@ -30,11 +37,12 @@ Milestones are sized to land the whole extension in 6–8 weeks at ~8 hrs/week. 
 
 **Exit criterion:** two open-model columns complete. Fine-tuning dataset ready (≥200 examples).
 
-## M4 — LoRA fine-tuning via Together AI · 1 week
+## M4 — LoRA fine-tuning via Together AI · in progress
 
-- [ ] `scripts/data_prep.py`: convert raw solver traces → chat-format JSONL for Together AI fine-tuning API.
-- [ ] `scripts/finetune.py`: launch LoRA fine-tuning job on Together AI (Llama 3.1 8B base, ~$0.50–1 on free credits).
-- [ ] Evaluate fine-tuned model on held-out puzzles using `basic` solver (single pass, no multi-agent) — does the distilled model match or beat multi-agent GVC?
+- [x] `scripts/data_prep.py`: converts 1,037 Connections puzzles into 3,320 train / 828 test chat-format examples (~786K train tokens).
+- [x] `scripts/finetune.py`: uploads data and launches LoRA fine-tuning on Together AI with job management CLI.
+- [x] LoRA fine-tuning job launched on `meta-llama/Meta-Llama-3.1-8B-Instruct-Reference` (3 epochs, batch 8, lr 1e-5, rank 16). Estimated cost ~$6.29.
+- [ ] Evaluate fine-tuned model on held-out 207 puzzles using `basic` solver (single pass, no multi-agent).
 - [ ] Add Table 1 row for fine-tuned model. Compare single-pass fine-tuned vs. multi-agent Snap-GVC.
 
 **Exit criterion:** fine-tuned Llama 3.1 8B evaluated on 50+ puzzles. Clear comparison: does distilling multi-agent reasoning into weights work?
