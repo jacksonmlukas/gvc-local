@@ -12,22 +12,27 @@ Milestones are sized to land the whole extension in 6–8 weeks at ~8 hrs/week. 
 - [x] Run `basic` solver end-to-end on 10 puzzles via Groq; pipeline confirmed working.
 - [x] CI green (ruff check, ruff format, pytest, mypy continue-on-error).
 
-## M2 — GVC and Snap-GVC on Llama 3.1 8B · in progress
+## M2 — GVC and Snap-GVC on Llama 3.1 8B · ✅ complete
 
 - [x] Run `basic` solver on 10 puzzles via Groq: **2/10 (20%)**.
-- [x] Run `snap_gvc` solver on 9 puzzles via Groq: **6/9 (67%)**. Snap-GVC triples basic accuracy.
-- [x] Collect solver interaction traces (JSONL) — 10 basic + 9 snap_gvc traces saved.
-- [ ] Run `cot` and `gvc` solvers on 10 puzzles via Groq.
-- [ ] Scale all 4 solvers to 100 puzzles for full Table 1.
+- [x] Run `cot` solver on 10 puzzles via Groq: **3/10 (30%)**.
+- [x] Run `gvc` solver on 10 puzzles via Groq: **6/10 (60%)**.
+- [x] Run `snap_gvc` solver on 10 puzzles via Groq: **6/10 (60%)** *(v3 deterministic-swap iteration; see README footnote on Groq rate-limit noise)*.
+- [x] Collect solver interaction traces (JSONL) — 10 each for basic + snap_gvc + finetuned.
+- [ ] Scale all 4 solvers to 100 puzzles with bootstrapped CIs (rolled into M5).
 
-**Preliminary results (Llama 3.1 8B via Groq):**
+**Headline result (Llama 3.1 8B via Groq, 10 puzzles):**
 
-| Solver | Puzzles | Solved | Rate |
-|--------|---------|--------|------|
-| basic | 10 | 2 | 20% |
-| snap_gvc | 9 | 6 | 67% |
+| Solver | Solved | Rate |
+|--------|--------|------|
+| basic | 2/10 | 20% |
+| cot | 3/10 | 30% |
+| gvc | 6/10 | **60%** |
+| snap_gvc | 6/10 | **60%** |
 
-**Exit criterion:** published results table for Llama 3.1 8B across all four strategies.
+Multi-agent prompting structure triples open-model accuracy with no parameter updates.
+
+**Exit criterion met:** four-strategy table published for Llama 3.1 8B in README.
 
 ## M3 — Qwen 2.5 7B replication + fine-tuning data · 3–5 days
 
@@ -37,15 +42,18 @@ Milestones are sized to land the whole extension in 6–8 weeks at ~8 hrs/week. 
 
 **Exit criterion:** two open-model columns complete. Fine-tuning dataset ready (≥200 examples).
 
-## M4 — LoRA fine-tuning via Together AI · in progress
+## M4 — LoRA fine-tuning via Together AI · ✅ complete (negative result)
 
 - [x] `scripts/data_prep.py`: converts 1,037 Connections puzzles into 3,320 train / 828 test chat-format examples (~786K train tokens).
 - [x] `scripts/finetune.py`: uploads data and launches LoRA fine-tuning on Together AI with job management CLI.
-- [x] LoRA fine-tuning job launched on `meta-llama/Meta-Llama-3.1-8B-Instruct-Reference` (3 epochs, batch 8, lr 1e-5, rank 16). Estimated cost ~$6.29.
-- [ ] Evaluate fine-tuned model on held-out 207 puzzles using `basic` solver (single pass, no multi-agent).
-- [ ] Add Table 1 row for fine-tuned model. Compare single-pass fine-tuned vs. multi-agent Snap-GVC.
+- [x] LoRA fine-tuning job completed on `meta-llama/Meta-Llama-3.1-8B-Instruct-Reference` (3 epochs, batch 8, lr 1e-5, rank 16). Actual cost: **$4.00**, runtime ~8 minutes.
+- [x] Adapter uploaded to HuggingFace: [`jacksonlukas/gvc-connections-lora`](https://huggingface.co/jacksonlukas/gvc-connections-lora).
+- [x] Held-out eval on 50 puzzles (830–879) via Google Colab free T4 GPU + 4-bit quantized inference: **6/50 = 12.0%**.
+- [x] Apples-to-apples eval on puzzles 0–9: **2/10 = 20%** (matches basic single-pass baseline; LoRA did not help).
 
-**Exit criterion:** fine-tuned Llama 3.1 8B evaluated on 50+ puzzles. Clear comparison: does distilling multi-agent reasoning into weights work?
+**Finding:** distilling single-pass behavior into 8B weights regresses against multi-agent zero-shot prompting on the same base model. Working hypothesis: at this scale, inference-time control structure does more work than weight-level distillation of single-pass answers. Follow-up question (queued for a future milestone): would distilling multi-agent *traces* close the gap?
+
+**Exit criterion met:** clear comparison between single-pass LoRA and multi-agent zero-shot, both reported in README.
 
 ## M5 — Proper eval harness · 1 week
 
