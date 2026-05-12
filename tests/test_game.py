@@ -4,7 +4,6 @@ import pytest
 
 from gvc_local.game import Category, Connections, GameOverError
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------

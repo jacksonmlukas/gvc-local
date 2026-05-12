@@ -2,11 +2,8 @@
 
 from __future__ import annotations
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
-import pytest
-
-from gvc_local.game import Category, Connections
 from gvc_local.solvers.base import SolverMetrics, TraceRecorder
 from gvc_local.solvers.gvc import (
     GVCSolver,
@@ -14,7 +11,6 @@ from gvc_local.solvers.gvc import (
     _normalize_words,
     _overlap_count,
 )
-
 
 # ---------------------------------------------------------------------------
 # Helper utilities
@@ -219,7 +215,6 @@ class TestTraceRecorder:
         # File should be closed
         assert rec._fh.closed
 
-        import json
         lines = path.read_text().strip().split("\n")
         assert len(lines) == 2
 
