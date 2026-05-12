@@ -19,6 +19,7 @@ confidence for deliberative reasoning.
 from __future__ import annotations
 
 import logging
+import time
 from pathlib import Path
 
 from gvc_local.agents.snap_guesser import SnapGuesserAgent
@@ -42,10 +43,12 @@ class SnapGVCSolver(BaseSolver):
         Optional RAG retriever.
     max_conservative_wrong:
         Number of wrong game-engine guesses in the conservative phase before
-        switching to snap.  (Default: 3, matching the upstream paper.)
+        switching to snap.  (Default: 2, more aggressive than upstream's 3
+        to conserve API budget on rate-limited tiers.)
     max_conservative_errors:
         Number of internal errors (parse failures, etc.) in conservative
-        phase before switching to snap.  (Default: 2.)
+        phase before switching to snap.  (Default: 3, raised from 2 to
+        tolerate more rate-limit retries.)
     max_internal_retries:
         Max guesser-validator rounds per conservative guess.
     snap_temperature:
@@ -63,9 +66,9 @@ class SnapGVCSolver(BaseSolver):
         client: Client,
         *,
         retriever: PuzzleRetriever | None = None,
-        max_conservative_wrong: int = 3,
-        max_conservative_errors: int = 2,
-        max_internal_retries: int = 15,
+        max_conservative_wrong: int = 2,
+        max_conservative_errors: int = 3,
+        max_internal_retries: int = 8,
         snap_temperature: float = 0.9,
         guesser_temperature: float = 0.7,
         validator_temperature: float = 0.7,
@@ -106,6 +109,88 @@ class SnapGVCSolver(BaseSolver):
         return self.gvc.guess(remaining_words, group_size, failed_guesses, metrics)
 
     # ------------------------------------------------------------------
+    # Deterministic swap engine — zero LLM calls
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _try_all_swaps(
+        near_miss: list[str],
+        remaining_words: list[str],
+        game: Connections,
+        sorted_failed: list[list[str]],
+        metrics: SolverMetrics,
+        recorder: TraceRecorder | None,
+    ) -> bool:
+        """Try every single-word swap on a near-miss guess.
+
+        When a guess is "one away" (3/4 correct), there are at most
+        ``4 * (len(remaining) - 4)`` candidate swaps.  We submit each
+        to the game engine without any LLM call.
+
+        Returns True if one of the swaps is correct (category solved).
+        """
+        near_set = set(w.upper() for w in near_miss)
+        pool = [w for w in remaining_words if w.upper() not in near_set]
+        upper_miss = [w.upper() for w in near_miss]
+
+        for swap_out_idx in range(len(upper_miss)):
+            for swap_in in pool:
+                candidate = list(upper_miss)
+                candidate[swap_out_idx] = swap_in.upper()
+                sorted_cand = sorted(candidate)
+
+                # Skip if this exact combo was already tried
+                if sorted_cand in sorted_failed:
+                    continue
+
+                try:
+                    result = game.category_guess_check(candidate)
+                except GameOverError:
+                    logger.warning("[SwapEngine] game over during swap search")
+                    return False
+
+                if result is not None:
+                    cat_idx = game._og_groups.index(result)
+                    metrics.record_solve(cat_idx)
+                    logger.info(
+                        "[SwapEngine] SOLVED via swap: %s -> %s "
+                        "(swapped %s for %s)",
+                        candidate, result.group,
+                        upper_miss[swap_out_idx], swap_in,
+                    )
+                    if recorder:
+                        recorder.record(
+                            "correct_guess",
+                            {
+                                "phase": "swap_engine",
+                                "guess": candidate,
+                                "actual_category": result.group,
+                                "swapped_out": upper_miss[swap_out_idx],
+                                "swapped_in": swap_in,
+                            },
+                        )
+                    return True
+                else:
+                    # Wrong swap — track it
+                    metrics.increment_failed()
+                    sorted_failed.append(sorted_cand)
+                    if recorder:
+                        recorder.record(
+                            "wrong_guess",
+                            {
+                                "phase": "swap_engine",
+                                "guess": candidate,
+                                "category": "swap_attempt",
+                            },
+                        )
+
+                    if game.is_over:
+                        return False
+
+        logger.info("[SwapEngine] exhausted all swaps, none correct")
+        return False
+
+    # ------------------------------------------------------------------
     # Main game loop -- overrides BaseSolver.play()
     # ------------------------------------------------------------------
 
@@ -124,8 +209,6 @@ class SnapGVCSolver(BaseSolver):
         self._failed_guesses = []
         self._sorted_failed = []
         self.gvc.reset()
-
-        import time
 
         t0 = time.time()
 
@@ -187,6 +270,25 @@ class SnapGVCSolver(BaseSolver):
                     self._failed_guesses.append(sorted_g)
                     self._sorted_failed.append(sorted_g)
                     wrong_count += 1
+
+                    # Track near-misses and elimination pairs
+                    self.gvc.record_failed_pairs(guess_words)
+                    if game.last_one_away:
+                        self.gvc.record_near_miss(guess_words)
+                        logger.info(
+                            "[SnapGVC] CONSERVATIVE ONE AWAY: %s — "
+                            "activating swap engine", guess_words
+                        )
+                        # Deterministic swap: try all single-word swaps
+                        swap_solved = self._try_all_swaps(
+                            guess_words, remaining, game,
+                            self._sorted_failed, metrics, recorder,
+                        )
+                        if swap_solved:
+                            wrong_count = 0
+                            self.gvc._reset_guess_state()
+                            continue  # back to conservative with one fewer group
+
                     logger.info(
                         "[SnapGVC] CONSERVATIVE WRONG (%d/%d): %s",
                         wrong_count,
@@ -200,6 +302,7 @@ class SnapGVCSolver(BaseSolver):
                                 "phase": "conservative",
                                 "guess": guess_words,
                                 "category": category,
+                                "one_away": game.last_one_away,
                             },
                         )
 
@@ -239,7 +342,10 @@ class SnapGVCSolver(BaseSolver):
                 recorder.record("phase", {"phase": "snap"})
 
             snap_correct = False
-            while not game.is_over and not snap_correct:
+            snap_attempts = 0
+            max_snap_attempts = 10  # cap snap retries to avoid infinite loops
+            while not game.is_over and not snap_correct and snap_attempts < max_snap_attempts:
+                snap_attempts += 1
                 remaining = game.all_words
                 feedback = self._format_snap_feedback()
 
@@ -274,6 +380,23 @@ class SnapGVCSolver(BaseSolver):
                     sorted_g = sorted(w.upper() for w in guess_words)
                     self._failed_guesses.append(sorted_g)
                     self._sorted_failed.append(sorted_g)
+
+                    # Track near-misses and elimination pairs
+                    self.gvc.record_failed_pairs(guess_words)
+                    if game.last_one_away:
+                        self.gvc.record_near_miss(guess_words)
+                        logger.info(
+                            "[SnapGVC] SNAP ONE AWAY: %s — "
+                            "activating swap engine", guess_words
+                        )
+                        swap_solved = self._try_all_swaps(
+                            guess_words, remaining, game,
+                            self._sorted_failed, metrics, recorder,
+                        )
+                        if swap_solved:
+                            snap_correct = True  # switch back to conservative
+                            break
+
                     logger.info("[SnapGVC] SNAP WRONG: %s", guess_words)
                     if recorder:
                         recorder.record(
@@ -282,6 +405,7 @@ class SnapGVCSolver(BaseSolver):
                                 "phase": "snap",
                                 "guess": guess_words,
                                 "reason": reason,
+                                "one_away": game.last_one_away,
                             },
                         )
                 else:
@@ -330,13 +454,29 @@ class SnapGVCSolver(BaseSolver):
     # ------------------------------------------------------------------
 
     def _format_snap_feedback(self) -> str:
-        """Build feedback string for the snap agent about failed guesses."""
+        """Build feedback string for the snap agent about failed guesses and near-misses."""
         if not self._sorted_failed:
             return ""
+
+        sections: list[str] = []
+
+        # Failed guesses
         lines = [
             "Note: You must not return any 4-word groupings from the "
             "following groups as they're not part of the solution:"
         ]
         for fg in self._sorted_failed:
             lines.append(f"  - {', '.join(fg)}")
-        return "\n".join(lines)
+        sections.append("\n".join(lines))
+
+        # Near-miss hints
+        if self.gvc._near_misses:
+            nm_lines = [
+                "IMPORTANT: These guesses were ONE AWAY (3/4 correct). "
+                "Try swapping exactly one word:"
+            ]
+            for nm in self.gvc._near_misses:
+                nm_lines.append(f"  - {', '.join(nm)}")
+            sections.append("\n".join(nm_lines))
+
+        return "\n\n".join(sections)

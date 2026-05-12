@@ -28,39 +28,80 @@ from gvc_local.solvers.base import BaseSolver, SolverMetrics
 logger = logging.getLogger(__name__)
 
 
+def _normalize_words(words: list[str]) -> list[str]:
+    """Strip, uppercase, and remove stray commas from word lists."""
+    return [w.strip().upper().replace(",", "") for w in words]
+
+
+def _overlap_count(a: list[str], b: list[str]) -> int:
+    """Count how many words two sorted groups share."""
+    return len(set(a) & set(b))
+
+
 def _grounding_check(
     guess: list[str],
     remaining_words: list[str],
     group_size: int,
     sorted_failed_guesses: list[list[str]],
+    *,
+    fuzzy_dedup: bool = True,
+    max_overlap: int = 4,
 ) -> tuple[bool, str]:
     """Deterministic validation of a guess before submitting to the game engine.
 
-    Returns (is_valid, error_message).
-    """
-    proc_guess = [w.strip().upper().replace(",", "") for w in guess]
-    proc_remaining = [w.strip().upper().replace(",", "") for w in remaining_words]
-    proc_failed = [[w.strip().upper().replace(",", "") for w in g] for g in sorted_failed_guesses]
+    Parameters
+    ----------
+    guess:
+        The proposed group of words.
+    remaining_words:
+        Words still on the board.
+    group_size:
+        Required number of words per group (typically 4).
+    sorted_failed_guesses:
+        Previously failed guesses (sorted, uppercased).
+    fuzzy_dedup:
+        If True, reject guesses that share ``max_overlap`` or more words
+        with any failed guess — not just exact repeats.  This forces the
+        solver to explore more of the search space.
+    max_overlap:
+        The overlap threshold for fuzzy dedup.  A guess sharing this many
+        words (out of ``group_size``) with a failed guess is rejected.
+        Default 4 means only exact duplicates are rejected (effectively
+        disabling fuzzy dedup while keeping exact-repeat blocking).
 
-    errors: list[str] = []
+    Returns
+    -------
+    A 2-tuple of (is_valid, error_message).
+    """
+    proc_guess = _normalize_words(guess)
+    proc_remaining = _normalize_words(remaining_words)
+    proc_failed = [_normalize_words(g) for g in sorted_failed_guesses]
 
     # Rule 1: all words must be on the board
     missing = [w for w in proc_guess if w not in proc_remaining]
     if missing:
-        errors.append(f"Word(s) {missing} not in remaining words.")
-        return False, " ".join(errors)
+        return False, f"Word(s) {missing} not in remaining words."
 
     # Rule 2: correct group size
     if len(proc_guess) != group_size:
-        errors.append(f"Expected {group_size} words, got {len(proc_guess)}.")
-        return False, " ".join(errors)
+        return False, f"Expected {group_size} words, got {len(proc_guess)}."
 
-    # Rule 3: not a repeat of a failed guess
+    # Rule 3: not an exact repeat of a failed guess
     sorted_guess = sorted(proc_guess)
     for fg in proc_failed:
         if sorted_guess == sorted(fg):
-            errors.append(f"Guess {sorted_guess} repeats a previously failed grouping.")
-            return False, " ".join(errors)
+            return False, f"Guess {sorted_guess} repeats a previously failed grouping."
+
+    # Rule 4 (fuzzy dedup): reject guesses too similar to past failures
+    if fuzzy_dedup:
+        guess_set = set(proc_guess)
+        for fg in proc_failed:
+            overlap = len(guess_set & set(fg))
+            if overlap >= max_overlap:
+                return False, (
+                    f"Guess shares {overlap}/{group_size} words with failed guess "
+                    f"{sorted(fg)} — try a more different grouping."
+                )
 
     return True, ""
 
@@ -90,14 +131,16 @@ class GVCSolver(BaseSolver):
         client: Client,
         *,
         retriever: PuzzleRetriever | None = None,
-        max_internal_retries: int = 15,
+        max_internal_retries: int = 8,
         guesser_temperature: float = 0.7,
         validator_temperature: float = 0.7,
         rag_k: int = 3,
+        validator_bypass_after: int = 5,
     ) -> None:
         self.client = client
         self.retriever = retriever
         self.max_internal_retries = max_internal_retries
+        self.validator_bypass_after = validator_bypass_after
         self.rag_k = rag_k
 
         self.guesser = GuesserAgent(client, temperature=guesser_temperature)
@@ -109,6 +152,12 @@ class GVCSolver(BaseSolver):
         self._guesser_understanding: list[list[str]] | None = None
         self._rejected_buffer: deque[list[str]] = deque(maxlen=max_internal_retries)
         self._validator_feedback: str | None = None
+
+        # Near-miss memory: guesses that were "one away" (3/4 correct)
+        self._near_misses: list[list[str]] = []
+
+        # Elimination tracking: word-pair co-occurrence in failed guesses
+        self._failed_pair_counts: dict[tuple[str, str], int] = {}
 
     # ------------------------------------------------------------------
     # BaseSolver interface
@@ -177,9 +226,22 @@ class GVCSolver(BaseSolver):
                 self._validator_feedback = error
                 continue
 
-            # If only one group left, skip validation
+            # Skip validation when few groups remain or retries are burning out
             if len(remaining_words) <= group_size:
                 logger.info("[GVC] last group, skipping validation")
+                self._reset_guess_state()
+                return group, category
+
+            if len(remaining_words) <= group_size * 2:
+                logger.info("[GVC] only 2 groups left, skipping validation")
+                self._reset_guess_state()
+                return group, category
+
+            if attempt > self.validator_bypass_after:
+                logger.info(
+                    "[GVC] attempt %d > bypass threshold %d, skipping validator",
+                    attempt, self.validator_bypass_after,
+                )
                 self._reset_guess_state()
                 return group, category
 
@@ -222,12 +284,61 @@ class GVCSolver(BaseSolver):
     # ------------------------------------------------------------------
 
     def _format_failed_feedback(self) -> str:
+        """Build structured feedback from failed guesses, near-misses, and elimination info."""
         if not self._sorted_failed:
             return ""
+
+        sections: list[str] = []
+
+        # Section 1: Failed guesses
         lines = ["- The following groups have been guessed but are NOT part of the solution:"]
         for fg in self._sorted_failed:
             lines.append(f"  - {', '.join(fg)}")
-        return "\n".join(lines)
+        sections.append("\n".join(lines))
+
+        # Section 2: Near-miss hints (one-away guesses)
+        if self._near_misses:
+            nm_lines = [
+                "- IMPORTANT — These guesses were ONE AWAY (3 of 4 words were correct):",
+            ]
+            for nm in self._near_misses:
+                nm_lines.append(
+                    f"  - {', '.join(nm)}  ← Exactly ONE word here is wrong. "
+                    f"Try swapping each word with a remaining word."
+                )
+            sections.append("\n".join(nm_lines))
+
+        # Section 3: Elimination constraints from repeated failures
+        if self._failed_pair_counts:
+            # Identify word pairs that appeared together in 3+ failed guesses
+            # — they probably don't belong in the same group
+            suspect_pairs = [
+                pair for pair, count in self._failed_pair_counts.items() if count >= 3
+            ]
+            if suspect_pairs:
+                elim_lines = [
+                    "- ELIMINATION HINT — These word pairs have appeared together "
+                    "in 3+ failed guesses and likely do NOT belong in the same group:",
+                ]
+                for w1, w2 in suspect_pairs[:5]:  # cap to avoid prompt bloat
+                    elim_lines.append(f"  - {w1} + {w2}")
+                sections.append("\n".join(elim_lines))
+
+        return "\n\n".join(sections)
+
+    def record_near_miss(self, guess: list[str]) -> None:
+        """Record a guess that was 'one away' (3/4 words correct)."""
+        normalized = sorted(_normalize_words(guess))
+        if normalized not in self._near_misses:
+            self._near_misses.append(normalized)
+
+    def record_failed_pairs(self, guess: list[str]) -> None:
+        """Track word-pair co-occurrence across failed guesses for elimination."""
+        words = _normalize_words(guess)
+        for i in range(len(words)):
+            for j in range(i + 1, len(words)):
+                pair = tuple(sorted([words[i], words[j]]))
+                self._failed_pair_counts[pair] = self._failed_pair_counts.get(pair, 0) + 1
 
     def _reset_guess_state(self) -> None:
         """Clear per-guess (not per-game) transient state."""
@@ -242,3 +353,5 @@ class GVCSolver(BaseSolver):
         self._guesser_understanding = None
         self._rejected_buffer.clear()
         self._validator_feedback = None
+        self._near_misses = []
+        self._failed_pair_counts = {}

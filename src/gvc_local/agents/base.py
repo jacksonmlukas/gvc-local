@@ -28,9 +28,9 @@ logger = logging.getLogger(__name__)
 # Transient errors that are safe to retry.
 _RETRYABLE = (APIConnectionError, APITimeoutError, InternalServerError, RateLimitError)
 
-# Defaults
-_MAX_RETRIES = 3
-_BACKOFF_BASE = 2.0  # seconds
+# Defaults — tuned for Groq free-tier rate limits (429s can last minutes)
+_MAX_RETRIES = 6
+_BACKOFF_BASE = 3.0  # seconds (3, 9, 27, 81, 243, 729 — capped at 90s)
 
 
 class Agent:
@@ -115,7 +115,7 @@ class Agent:
                 return text
             except _RETRYABLE as exc:
                 last_exc = exc
-                wait = _BACKOFF_BASE**attempt
+                wait = min(_BACKOFF_BASE**attempt, 90.0)  # cap at 90s
                 logger.warning(
                     "[%s] transient error on attempt %d/%d, retrying in %.1fs: %s",
                     self.role,
@@ -160,7 +160,7 @@ class Agent:
                 return text, usage
             except _RETRYABLE as exc:
                 last_exc = exc
-                wait = _BACKOFF_BASE**attempt
+                wait = min(_BACKOFF_BASE**attempt, 90.0)  # cap at 90s
                 logger.warning(
                     "[%s] transient error (raw) on attempt %d/%d, retrying in %.1fs: %s",
                     self.role,

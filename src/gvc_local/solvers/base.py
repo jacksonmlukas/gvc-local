@@ -71,20 +71,34 @@ class TraceRecorder:
 
     Each line is a JSON object with ``{"event": ..., "data": ..., "ts": ...}``.
     Useful for collecting fine-tuning data from successful solves.
+
+    Supports use as a context manager for safe resource cleanup::
+
+        with TraceRecorder("traces/puzzle.jsonl") as rec:
+            rec.record("game_start", {...})
     """
 
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._fh = open(self.path, "a")
+        self._fh = open(self.path, "a")  # noqa: SIM115
 
     def record(self, event: str, data: dict[str, Any]) -> None:
+        """Write a single event to the trace file."""
         line = json.dumps({"event": event, "data": data, "ts": time.time()})
         self._fh.write(line + "\n")
         self._fh.flush()
 
     def close(self) -> None:
-        self._fh.close()
+        """Close the underlying file handle."""
+        if not self._fh.closed:
+            self._fh.close()
+
+    def __enter__(self) -> TraceRecorder:
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        self.close()
 
 
 # ---------------------------------------------------------------------------
@@ -192,11 +206,19 @@ class BaseSolver(abc.ABC):
                 metrics.record_hallucinations(guess_words, remaining)
                 sorted_guess = sorted(w.upper() for w in guess_words)
                 failed_guesses.append(sorted_guess)
+
+                # Track near-misses and elimination pairs if solver supports it
+                if hasattr(self, "record_failed_pairs"):
+                    self.record_failed_pairs(guess_words)
+                if hasattr(self, "record_near_miss") and game.last_one_away:
+                    self.record_near_miss(guess_words)
+
                 logger.info(
-                    "[Solver] WRONG: %s (category=%s)  strikes=%d",
+                    "[Solver] WRONG: %s (category=%s)  strikes=%d  one_away=%s",
                     guess_words,
                     category,
                     game.current_strikes,
+                    game.last_one_away,
                 )
                 if recorder:
                     recorder.record(
@@ -205,6 +227,7 @@ class BaseSolver(abc.ABC):
                             "guess": guess_words,
                             "category": category,
                             "strikes": game.current_strikes,
+                            "one_away": game.last_one_away,
                         },
                     )
             else:

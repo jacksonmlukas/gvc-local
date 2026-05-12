@@ -96,9 +96,19 @@ except ImportError:
                 raise GameOverError("Max strikes reached!")
             for i, group in enumerate(self.categories):
                 if group.matches(words):
+                    self._last_one_away = False
                     return self.categories.pop(i)
             self.current_strikes += 1
+            # Check if the guess was "one away" from any remaining category
+            self._last_one_away = any(
+                len(set(words) & set(cat.members)) == 3 for cat in self.categories
+            )
             return None
+
+        @property
+        def last_one_away(self) -> bool:
+            """True if the most recent wrong guess had 3/4 words correct."""
+            return getattr(self, "_last_one_away", False)
 
         def reset(self) -> None:
             self.categories = self._og_groups.copy()

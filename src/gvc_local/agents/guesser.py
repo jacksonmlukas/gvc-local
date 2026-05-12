@@ -44,7 +44,16 @@ corresponding categories. Your categories should be specific enough that \
 another agent could distinguish the group of four words from the word bank \
 solely based on the category name.
 
-**DO NOT GUESS A PREVIOUSLY GUESSED CATEGORY.**
+**CRITICAL RULES:**
+1. DO NOT GUESS A PREVIOUSLY GUESSED CATEGORY.
+2. THINK ABOUT ALL 4 GROUPS SIMULTANEOUSLY. Before committing to a guess, \
+verify that the remaining 12 words can form 3 coherent groups. If they \
+cannot, your chosen group is likely wrong — revise it.
+3. USE PROCESS OF ELIMINATION. If a word fits two possible categories, check \
+which placement leaves the other groups intact. The correct partition is the \
+one where ALL four groups work, not just one.
+4. If told you were "ONE AWAY", systematically try swapping each word in \
+that guess with each remaining word until you find the correct group.
 
 Refer to these category style examples for guidance:
 CONTORTED, CUT THE ___, KINDS OF PICKLES, ESCAPADE, PUBLIC STANDING, \

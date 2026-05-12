@@ -65,8 +65,30 @@ MODEL_MAP: dict[str, dict[str, str]] = {
 MODEL_CHOICES = list(MODEL_MAP["local"])
 
 
-def _resolve_endpoint(model_key: str, provider: str, base_url: str | None) -> EndpointConfig:
-    """Map a friendly model name + provider to an ``EndpointConfig``."""
+def _resolve_endpoint(model_key: str, provider: str, base_url: str | None, model_override: str | None = None) -> EndpointConfig:
+    """Map a friendly model name + provider to an ``EndpointConfig``.
+
+    If *model_override* is given, it bypasses the MODEL_MAP and creates an
+    EndpointConfig directly with that model string — useful for fine-tuned
+    models hosted on Together AI or other providers.
+    """
+    if model_override:
+        import os
+
+        provider_urls = {
+            "groq": "https://api.groq.com/openai/v1",
+            "together": "https://api.together.xyz/v1",
+        }
+        provider_keys = {
+            "groq": os.environ.get("GROQ_API_KEY", ""),
+            "together": os.environ.get("TOGETHER_API_KEY", ""),
+        }
+        return EndpointConfig(
+            model=model_override,
+            base_url=base_url or provider_urls.get(provider, "http://localhost:8000/v1"),
+            api_key=provider_keys.get(provider, "EMPTY"),
+        )
+
     try:
         factory_name = MODEL_MAP[provider][model_key]
     except KeyError as exc:
@@ -154,6 +176,12 @@ def _build_solver(
     default=0.0,
     help="Seconds to wait between puzzles (helps with cloud rate limits).",
 )
+@click.option(
+    "--model-override",
+    type=str,
+    default=None,
+    help="Custom model string (e.g. fine-tuned model ID). Bypasses MODEL_MAP.",
+)
 @click.option("--dry-run", is_flag=True, help="Print config and exit.")
 @click.option("-v", "--verbose", is_flag=True, help="Enable DEBUG logging.")
 def main(
@@ -167,6 +195,7 @@ def main(
     traces: str | None,
     out: str | None,
     delay: float,
+    model_override: str | None,
     dry_run: bool,
     verbose: bool,
 ) -> None:
@@ -177,7 +206,7 @@ def main(
         datefmt="%H:%M:%S",
     )
 
-    endpoint = _resolve_endpoint(model, provider, base_url)
+    endpoint = _resolve_endpoint(model, provider, base_url, model_override=model_override)
 
     plan = {
         "solver": solver,
@@ -270,8 +299,10 @@ def main(
         game.reset()
 
         # Rate-limit delay (cloud providers throttle aggressively)
-        if delay > 0 and idx < len(games) - 1:
-            time.sleep(delay)
+        effective_delay = delay if delay > 0 else (5.0 if provider in ("groq", "together") else 0.0)
+        if effective_delay > 0 and idx < len(games) - 1:
+            click.echo(f"  (waiting {effective_delay:.0f}s between puzzles for rate limits)")
+            time.sleep(effective_delay)
 
     wall_elapsed = time.time() - wall_start
 
