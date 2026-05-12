@@ -138,7 +138,7 @@ def puzzle_to_examples(
     remaining = list(sorted_cats)  # mutable copy
 
     rounds = 1 if single_round else len(remaining)
-    for i in range(rounds):
+    for _i in range(rounds):
         if not remaining:
             break
 
@@ -226,7 +226,6 @@ def main() -> None:
     random.shuffle(indices)
 
     train_indices = set(indices[:n_train])
-    test_indices = set(indices[n_train:])
 
     # Generate examples
     train_examples = []
@@ -277,7 +276,7 @@ def main() -> None:
     print(f"Train tokens (est): ~{train_tokens:,}")
     print(f"Test tokens (est):  ~{test_tokens:,}")
     print(f"Estimated training cost @ $0.008/1K tokens: ~${train_tokens * 0.008 / 1000:.2f}")
-    print(f"\nFiles written:")
+    print("\nFiles written:")
     print(f"  {train_path}")
     print(f"  {test_path}")
     print(f"{'='*50}")
