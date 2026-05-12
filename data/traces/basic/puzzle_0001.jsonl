@@ -1,0 +1,24 @@
+{"event": "game_start", "data": {"words": ["BOOT", "SNEAKER", "ARE", "PEOPLE", "YARD", "MILE", "LOAFER", "TIME", "QUEUE", "PUMP", "FOOT", "WHY", "ESSENCE", "SEA", "LEAGUE", "US"], "categories": [{"group": "FOOTWEAR", "level": 0, "members": ["BOOT", "LOAFER", "PUMP", "SNEAKER"]}, {"group": "UNITS OF LENGTH", "level": 1, "members": ["FOOT", "LEAGUE", "MILE", "YARD"]}, {"group": "MAGAZINES", "level": 2, "members": ["ESSENCE", "PEOPLE", "TIME", "US"]}, {"group": "LETTER HOMOPHONES", "level": 3, "members": ["ARE", "QUEUE", "SEA", "WHY"]}]}, "ts": 1776468054.613158}
+{"event": "wrong_guess", "data": {"guess": ["ESSENCE", "MOMENTARY", "MOM", "KAYAK"], "category": "DOUBLE LETTERS IN WORDS", "strikes": 1}, "ts": 1776468060.282915}
+{"event": "correct_guess", "data": {"guess": ["PUMP", "SNEAKER", "LOAFER", "BOOT"], "proposed_category": "KINDS OF SHOES", "actual_category": "FOOTWEAR", "level": 0}, "ts": 1776468071.14892}
+{"event": "correct_guess", "data": {"guess": ["FOOT", "YARD", "MILE", "LEAGUE"], "proposed_category": "UNITS_OF_DISTANCE", "actual_category": "UNITS OF LENGTH", "level": 1}, "ts": 1776468082.044445}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "WHY", "ARE", "TIME"], "category": "PREPOSITIONS_OF_TIME", "strikes": 2}, "ts": 1776468094.309736}
+{"event": "wrong_guess", "data": {"guess": ["ARE", "TIME", "WHY", "PEOPLE"], "category": "QUESTIONS", "strikes": 3}, "ts": 1776468101.855257}
+{"event": "wrong_guess", "data": {"guess": ["US", "SEA", "TIME", "WHY"], "category": "CONTINENTAL, OCEAN, MEASURE, INTERROGATIVE", "strikes": 4}, "ts": 1776468114.944736}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "US", "WHY"], "category": "ASKING FOR INFORMATION", "strikes": 5}, "ts": 1776468127.9715111}
+{"event": "wrong_guess", "data": {"guess": ["TIME", "US", "ARE", "WHY"], "category": "PHRASES_OF_TIME", "strikes": 6}, "ts": 1776468138.793843}
+{"event": "wrong_guess", "data": {"guess": ["SEA", "TIME", "US", "WHY"], "category": "SYNONYMS_FOR_WHEN", "strikes": 7}, "ts": 1776468147.321168}
+{"event": "wrong_guess", "data": {"guess": ["TIME", "PEOPLE", "WHY", "US"], "category": "COMMON QUESTIONS", "strikes": 8}, "ts": 1776468154.899711}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "US", "WHY"], "category": "QUESTIONS", "strikes": 9}, "ts": 1776468158.337176}
+{"event": "wrong_guess", "data": {"guess": ["ARE", "PEOPLE", "TIME", "US"], "category": "FORMS_OF_ADDRESS", "strikes": 10}, "ts": 1776468169.347748}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "US", "WHY"], "category": "FORMS OF TIME", "strikes": 11}, "ts": 1776468176.812557}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "QUEUE", "WHY", "ESSENCE"], "category": "WORDS WITH A SIMILAR THEME OR CONCEPT", "strikes": 12}, "ts": 1776468193.195319}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "US", "WHY"], "category": "COMMON PHRASES", "strikes": 13}, "ts": 1776468199.727326}
+{"event": "wrong_guess", "data": {"guess": ["ESSENCE", "KAYAK", "MOM", "MOMENTARY"], "category": "MOMENTS IN TIME", "strikes": 14}, "ts": 1776468208.332318}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "US", "WHY"], "category": "PUBLIC STANDING", "strikes": 15}, "ts": 1776468217.7908852}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "US", "WHY"], "category": "COMMON QUESTIONS", "strikes": 16}, "ts": 1776468226.400428}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "US", "WHY"], "category": "PUBLIC STANDING", "strikes": 17}, "ts": 1776468235.899529}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "WHY", "ARE"], "category": "PREPOSITIONS", "strikes": 18}, "ts": 1776468244.483964}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "TIME", "SEA", "WHY"], "category": "FORMS OF TRANSPORTATION, TIME INDICATIONS, BODIES OF WATER, REASONS/EXPLANATIONS", "strikes": 19}, "ts": 1776468257.628115}
+{"event": "wrong_guess", "data": {"guess": ["PEOPLE", "SEA", "TIME", "WHY"], "category": "COMMON QUESTIONS", "strikes": 20}, "ts": 1776468268.874024}
+{"event": "game_end", "data": {"solved": [true, true, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [["MOMENTARY", "MOM", "KAYAK"], ["KAYAK", "MOM", "MOMENTARY"]], "solve_order": [0, 1], "total_llm_calls": 31, "wall_time_s": 214.26}}, "ts": 1776468268.8742468}

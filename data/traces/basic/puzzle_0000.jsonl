@@ -1,0 +1,19 @@
+{"event": "game_start", "data": {"words": ["SHIFT", "NETS", "RAIN", "OPTION", "HEAT", "TAB", "RACECAR", "HAIL", "SLEET", "KAYAK", "LEVEL", "BUCKS", "SNOW", "MOM", "JAZZ", "RETURN"], "categories": [{"group": "WET WEATHER", "level": 0, "members": ["HAIL", "RAIN", "SLEET", "SNOW"]}, {"group": "NBA TEAMS", "level": 1, "members": ["BUCKS", "HEAT", "JAZZ", "NETS"]}, {"group": "KEYBOARD KEYS", "level": 2, "members": ["OPTION", "RETURN", "SHIFT", "TAB"]}, {"group": "PALINDROMES", "level": 3, "members": ["KAYAK", "LEVEL", "MOM", "RACECAR"]}]}, "ts": 1776467881.904018}
+{"event": "correct_guess", "data": {"guess": ["KAYAK", "LEVEL", "MOM", "RACECAR"], "proposed_category": "PALINDROMES", "actual_category": "PALINDROMES", "level": 3}, "ts": 1776467882.873572}
+{"event": "wrong_guess", "data": {"guess": ["JAZZ", "SLEET", "HAIL", "RETURN"], "category": "FORMS_OF_PRECIPITATION", "strikes": 1}, "ts": 1776467884.693347}
+{"event": "wrong_guess", "data": {"guess": ["TAB", "BUCKS", "NETS", "HEAT"], "category": "SPORTS TEAMS", "strikes": 2}, "ts": 1776467897.499765}
+{"event": "wrong_guess", "data": {"guess": ["LEVEL", "NETS", "SNOW", "SLEET"], "category": "FORMS OF PRECIPITATION", "strikes": 3}, "ts": 1776467905.920479}
+{"event": "wrong_guess", "data": {"guess": ["NETS", "SHIFT", "SNOW", "SLEET"], "category": "TYPES OF WEATHER", "strikes": 4}, "ts": 1776467916.911677}
+{"event": "wrong_guess", "data": {"guess": ["LEVEL", "SNOW", "SHIFT", "RAIN"], "category": "TYPES_OF_WEATHER_IN_EITHER_DIRECTION", "strikes": 5}, "ts": 1776467925.330693}
+{"event": "wrong_guess", "data": {"guess": ["LEVEL", "NETS", "SLEET", "SNOW"], "category": "TYPES OF WEATHER CONDITIONS", "strikes": 6}, "ts": 1776467932.7562199}
+{"event": "wrong_guess", "data": {"guess": ["TAB", "BUCKS", "HEAT", "NETS"], "category": "RAPPERS", "strikes": 7}, "ts": 1776467941.537048}
+{"event": "wrong_guess", "data": {"guess": ["BUCKS", "HEAT", "TAB", "NETS"], "category": "PROFESSIONAL BASKETBALL TEAMS", "strikes": 8}, "ts": 1776467950.022538}
+{"event": "wrong_guess", "data": {"guess": ["BUCKS", "TAB", "HEAT", "NETS"], "category": "SNEAKER BRANDS", "strikes": 9}, "ts": 1776467958.4131}
+{"event": "wrong_guess", "data": {"guess": ["RAIN", "SHIFT", "SNOW", "HAIL"], "category": "FORMS_OF_PRECIPITATION", "strikes": 10}, "ts": 1776467972.6369522}
+{"event": "wrong_guess", "data": {"guess": ["RAIN", "SHIFT", "SNOW", "HAIL"], "category": "Forms of Precipitation", "strikes": 11}, "ts": 1776467980.239039}
+{"event": "wrong_guess", "data": {"guess": ["SLEET", "JAZZ", "HEAT", "TAB"], "category": "TYPES_OF_WEATHER_AND_KEYBOARDS", "strikes": 12}, "ts": 1776467995.238218}
+{"event": "wrong_guess", "data": {"guess": ["BUCKS", "HAIL", "RETURN", "SLEET"], "category": "WORDS THAT CAN BE USED AS VERBS IN A SENTENCE, SUCH AS IN THE PHRASE \"HAIL A CAB\"", "strikes": 13}, "ts": 1776468010.5559402}
+{"event": "correct_guess", "data": {"guess": ["HAIL", "SLEET", "RAIN", "SNOW"], "proposed_category": "Types of Precipitation", "actual_category": "WET WEATHER", "level": 0}, "ts": 1776468026.59107}
+{"event": "correct_guess", "data": {"guess": ["SHIFT", "RETURN", "TAB", "OPTION"], "proposed_category": "NBA TEAMS", "actual_category": "KEYBOARD KEYS", "level": 2}, "ts": 1776468043.078489}
+{"event": "correct_guess", "data": {"guess": ["BUCKS", "HEAT", "NETS", "JAZZ"], "proposed_category": "NBA TEAMS", "actual_category": "NBA TEAMS", "level": 1}, "ts": 1776468052.601253}
+{"event": "game_end", "data": {"solved": [true, true, true, true], "metrics": {"failed_guesses": 13, "hallucinated_words": [["LEVEL"], ["LEVEL"], ["LEVEL"]], "solve_order": [3, 0, 2, 1], "total_llm_calls": 26, "wall_time_s": 170.7}}, "ts": 1776468052.6014981}

@@ -1,0 +1,17 @@
+{"event": "game_start", "data": {"words": ["BEET", "CRICKET", "CARROT", "FENCING", "CORN", "BEETLE", "MANTIS", "HALTER", "SQUASH", "TANK", "ANT", "TERMITE", "CAMI", "TEE", "POLO", "ONION"], "solver": "snap_gvc"}, "ts": 1776473398.2033868}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776473398.203639}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["BEETLE", "ANT", "TERMITE", "CRICKET"], "category": "INSECTS"}, "ts": 1776473398.926097}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["CORN", "ONION", "CARROT", "BEET"], "actual_category": "VEGETABLES"}, "ts": 1776473399.9035149}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["POLO", "FENCING", "TANK", "HALTER"], "category": "EQUESTRIAN SPORTS_EQUIPMENT"}, "ts": 1776473408.865558}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["BEETLE", "CAMI", "CRICKET", "TERMITE"], "category": "INSECTS"}, "ts": 1776473421.878186}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["BEETLE", "TERMITE", "TEE", "CAMI"], "category": "SPORTS_EQUIPMENT_ASSOCIATED_WITH_INSECTS"}, "ts": 1776473446.855969}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776473446.856506}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["MANTIS", "TEE", "TANK", "SQUASH"], "reason": "These words are all types of insect-related sports equipment or protective gear"}, "ts": 1776473453.3150709}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["HALTER", "POLO", "CRICKET", "MANTIS"], "reason": "Insect-related equipment"}, "ts": 1776473453.7146828}
+{"event": "correct_guess", "data": {"phase": "snap", "guess": ["TEE", "CAMI", "HALTER", "TANK"], "actual_category": "TOPS"}, "ts": 1776473463.546447}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776473463.5466838}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["CRICKET", "POLO", "MANTIS", "FENCING"], "category": "SPORTS_EQUIPMENT"}, "ts": 1776473541.4732878}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776473570.0404952}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["MANTIS", "CRICKET", "BEETLE", "TERMITE"], "reason": "types of insects or animals commonly involved in sports or games"}, "ts": 1776473612.639937}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["BEETLE", "POLO", "FENCING", "MANTIS"], "reason": "These insects can also be sports equipment names"}, "ts": 1776473802.855057}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["CRICKET", "MANTIS", "POLO", "TERMITE"], "reason": "Insect-related sports and events"}, "ts": 1776473871.458901}

@@ -1,0 +1,23 @@
+{"event": "game_start", "data": {"words": ["CHOW", "STOOGE", "WOLF", "LAB", "PIT", "POM", "SCARF", "NOSE", "KING", "TENOR", "MOUTH", "GOBBLE", "PEKE", "EYE", "CHEEK", "AMIGO"], "categories": [{"group": "FACIAL FEATURES", "level": 0, "members": ["CHEEK", "EYE", "MOUTH", "NOSE"]}, {"group": "SYNONYMS FOR EAT", "level": 1, "members": ["CHOW", "GOBBLE", "SCARF", "WOLF"]}, {"group": "DOG BREEDS, INFORMALLY", "level": 2, "members": ["LAB", "PEKE", "PIT", "POM"]}, {"group": "MEMBERS OF A TRIO", "level": 3, "members": ["AMIGO", "KING", "STOOGE", "TENOR"]}]}, "ts": 1776468288.753872}
+{"event": "wrong_guess", "data": {"guess": ["AMIGO", "SCARF", "POM", "PUPPY"], "category": "COMMON BREEDS OF DOGS", "strikes": 1}, "ts": 1776468289.154181}
+{"event": "wrong_guess", "data": {"guess": ["CHOW", "GOBBLE", "EYE", "NOSE"], "category": "PART OF THE FACE", "strikes": 2}, "ts": 1776468290.0592692}
+{"event": "wrong_guess", "data": {"guess": ["NOSE", "CHEEK", "LAB", "PIT"], "category": "FACIAL FEATURES", "strikes": 3}, "ts": 1776468301.1225011}
+{"event": "wrong_guess", "data": {"guess": ["CHEEK", "LAB", "WOLF", "PUPPY"], "category": "DOGS", "strikes": 4}, "ts": 1776468309.113936}
+{"event": "wrong_guess", "data": {"guess": ["SCARF", "CHEEK", "CHOW", "LAB"], "category": "Parts of the Face or Body that Hold or Carry Things", "strikes": 5}, "ts": 1776468316.0771542}
+{"event": "wrong_guess", "data": {"guess": ["POM", "AMIGO", "PEKE", "SCARF"], "category": "BREEDS_OF_DOG", "strikes": 6}, "ts": 1776468325.1952078}
+{"event": "wrong_guess", "data": {"guess": ["WOLF", "SCARF", "POM", "AMIGO"], "category": "BREEDS_OF_DOG", "strikes": 7}, "ts": 1776468334.151961}
+{"event": "wrong_guess", "data": {"guess": ["CHEEK", "PEKE", "PIT", "STOOGE"], "category": "TYPE OF FACE", "strikes": 8}, "ts": 1776468348.775479}
+{"event": "wrong_guess", "data": {"guess": ["CHEEK", "CHOW", "LAB", "SCARF"], "category": "Facial Features of Dogs", "strikes": 9}, "ts": 1776468357.5244591}
+{"event": "wrong_guess", "data": {"guess": ["PEKE", "PIT", "GOBBLE", "TENOR"], "category": "Types of Facial Features or Body Parts", "strikes": 10}, "ts": 1776468373.854709}
+{"event": "wrong_guess", "data": {"guess": ["STOOGE", "CHEEK", "GOBBLE", "TENOR"], "category": "CLUE CHARACTERS", "strikes": 11}, "ts": 1776468389.500482}
+{"event": "correct_guess", "data": {"guess": ["CHEEK", "EYE", "NOSE", "MOUTH"], "proposed_category": "PARTS OF THE FACE", "actual_category": "FACIAL FEATURES", "level": 0}, "ts": 1776468405.6629272}
+{"event": "wrong_guess", "data": {"guess": ["GOBBLE", "TENOR", "STOOGE", "PIT"], "category": "BIRD NOISES", "strikes": 12}, "ts": 1776468422.2112892}
+{"event": "wrong_guess", "data": {"guess": ["POM", "CHOW", "LAB", "SCARF"], "category": "BREEDS_OF_DOG", "strikes": 13}, "ts": 1776468438.446083}
+{"event": "wrong_guess", "data": {"guess": ["KING", "STOOGE", "LAB", "GOBBLE"], "category": "FACES_OF_CARDS_AND_CHARACTERS", "strikes": 14}, "ts": 1776468455.139204}
+{"event": "wrong_guess", "data": {"guess": ["GOBBLE", "WOLF", "POM", "CHOW"], "category": "BREEDS_OF_DOG", "strikes": 15}, "ts": 1776468470.690804}
+{"event": "wrong_guess", "data": {"guess": ["GOBBLE", "PEKE", "LAB", "AMIGO"], "category": "TYPE OF CANINE, TYPE OF FOWL, TYPE OF DOG BREED, TYPE OF DOG BREED", "strikes": 16}, "ts": 1776468482.072743}
+{"event": "wrong_guess", "data": {"guess": ["WOLF", "GOBBLE", "PIT", "SCARF"], "category": "ANIMATED MASCOTS", "strikes": 17}, "ts": 1776468498.5594938}
+{"event": "wrong_guess", "data": {"guess": ["CHEEK", "NOSE", "EYE", "CHIN"], "category": "LEG PARTS", "strikes": 18}, "ts": 1776468509.206204}
+{"event": "wrong_guess", "data": {"guess": ["PIT", "SCARF", "LAB", "GOBBLE"], "category": "CARTOON CHARACTERS", "strikes": 19}, "ts": 1776468525.7964318}
+{"event": "wrong_guess", "data": {"guess": ["PIT", "WOLF", "POM", "CHOW"], "category": "TYPES_OF_DOGS", "strikes": 20}, "ts": 1776468544.333498}
+{"event": "game_end", "data": {"solved": [true, false, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [["PUPPY"], ["PUPPY"], ["CHEEK", "NOSE", "EYE", "CHIN"]], "solve_order": [0], "total_llm_calls": 38, "wall_time_s": 255.58}}, "ts": 1776468544.3337002}

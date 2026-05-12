@@ -1,0 +1,22 @@
+{"event": "game_start", "data": {"words": ["JORDAN", "DATE", "TOGO", "TWINS", "JAY", "LEMON", "CRANE", "ORANGE", "GEORGIA", "CHAD", "SWALLOW", "TURKEY", "GOAT", "SCALES", "FISH", "KIWI"], "categories": [{"group": "FRUIT", "level": 0, "members": ["DATE", "KIWI", "LEMON", "ORANGE"]}, {"group": "COUNTRIES", "level": 1, "members": ["CHAD", "GEORGIA", "JORDAN", "TOGO"]}, {"group": "BIRDS", "level": 2, "members": ["CRANE", "JAY", "SWALLOW", "TURKEY"]}, {"group": "ZODIAC SYMBOLS", "level": 3, "members": ["FISH", "GOAT", "SCALES", "TWINS"]}]}, "ts": 1776470057.496665}
+{"event": "wrong_guess", "data": {"guess": ["JORDAN", "CAMI", "POLO", "TEE"], "category": "KINDS OF TOPS", "strikes": 1}, "ts": 1776470058.053072}
+{"event": "wrong_guess", "data": {"guess": ["TURKEY", "GOAT", "JAY", "JORDAN"], "category": "BIRD NAMES", "strikes": 2}, "ts": 1776470065.985659}
+{"event": "wrong_guess", "data": {"guess": ["JAY", "KIWI", "TURKEY", "GOAT"], "category": "BIRDS OF PREY", "strikes": 3}, "ts": 1776470078.087666}
+{"event": "wrong_guess", "data": {"guess": ["LEMON", "ORANGE", "JAY", "KIWI"], "category": "FRUIT AND BIRD NAMES SHARING THEIR NAMES", "strikes": 4}, "ts": 1776470092.100939}
+{"event": "wrong_guess", "data": {"guess": ["JAY", "GOAT", "KIWI", "TURKEY"], "category": "SPORTS TEAMS", "strikes": 5}, "ts": 1776470099.7155252}
+{"event": "wrong_guess", "data": {"guess": ["GOAT", "SCALES", "JORDAN", "TWINS"], "category": "Types of Clothing (or possibly something more specific like types of necklaces)", "strikes": 6}, "ts": 1776470114.081037}
+{"event": "wrong_guess", "data": {"guess": ["JAY", "KIWI", "LEMON", "ORANGE"], "category": "Fruits", "strikes": 7}, "ts": 1776470122.566289}
+{"event": "wrong_guess", "data": {"guess": ["DATE", "GOAT", "SCALES", "TWINS"], "category": "FORMS OF MEASUREMENT", "strikes": 8}, "ts": 1776470137.514388}
+{"event": "wrong_guess", "data": {"guess": ["LEMON", "ORANGE", "JAY", "GOAT"], "category": "KINDS OF BIRDS", "strikes": 9}, "ts": 1776470151.660318}
+{"event": "wrong_guess", "data": {"guess": ["JORDAN", "CHAD", "FENCING", "JAY"], "category": "FRENCH ARTISTS", "strikes": 10}, "ts": 1776470160.158315}
+{"event": "wrong_guess", "data": {"guess": ["GOAT", "SCALES", "JORDAN", "TWINS"], "category": "FASHION BRANDS", "strikes": 11}, "ts": 1776470170.725321}
+{"event": "wrong_guess", "data": {"guess": ["SCALES", "CRANE", "SWALLOW", "GOAT"], "category": "BIRDS", "strikes": 12}, "ts": 1776470181.767903}
+{"event": "wrong_guess", "data": {"guess": ["DATE", "TOGO", "GEORGIA", "CHAD"], "category": "CAPITAL_CITIES_OF_NATIONS", "strikes": 13}, "ts": 1776470197.94927}
+{"event": "wrong_guess", "data": {"guess": ["CRANE", "SWALLOW", "FISH", "TWINS"], "category": "BIRDS AND OTHER CREATURES", "strikes": 14}, "ts": 1776470215.047961}
+{"event": "wrong_guess", "data": {"guess": ["SCALES", "GOAT", "CHAD", "FISH"], "category": "TYPES_OF_FIGHTS", "strikes": 15}, "ts": 1776470232.335166}
+{"event": "wrong_guess", "data": {"guess": ["JAY", "KIWI", "LEMON", "ORANGE"], "category": "TYPES_OF_FRUIT", "strikes": 16}, "ts": 1776470242.916579}
+{"event": "wrong_guess", "data": {"guess": ["JORDAN", "DATE", "SCALES", "CHAD"], "category": "FENCING EQUIPMENT/SPORTS TERMS", "strikes": 17}, "ts": 1776470261.007883}
+{"event": "wrong_guess", "data": {"guess": ["CHAD", "CAMI", "POLO", "JORDAN"], "category": "U.S. STATES (ORIGIN OF FAMOUS LAST NAMES)", "strikes": 18}, "ts": 1776470270.4951072}
+{"event": "wrong_guess", "data": {"guess": ["CHAD", "CAMI", "POLO", "JORDAN"], "category": "FAMOUS LAST NAMES", "strikes": 19}, "ts": 1776470280.9938781}
+{"event": "wrong_guess", "data": {"guess": ["KIWI", "LEMON", "ORANGE", "JAY"], "category": "Types of Birds", "strikes": 20}, "ts": 1776470291.437885}
+{"event": "game_end", "data": {"solved": [false, false, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [["CAMI", "POLO", "TEE"], ["FENCING"], ["CAMI", "POLO"], ["CAMI", "POLO"]], "solve_order": [], "total_llm_calls": 31, "wall_time_s": 233.94}}, "ts": 1776470291.439121}

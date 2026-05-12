@@ -1,0 +1,7 @@
+{"event": "game_start", "data": {"words": ["GEORGIA", "FISH", "SCALES", "LEMON", "TURKEY", "TOGO", "DATE", "JORDAN", "GOAT", "CHAD", "CRANE", "JAY", "TWINS", "SWALLOW", "ORANGE", "KIWI"], "solver": "snap_gvc"}, "ts": 1776473887.746151}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776473887.746436}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776473916.471196}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["TOGO", "CHAD", "TURKEY", "GEORGIA"], "reason": "Countries in Africa"}, "ts": 1776473916.71997}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["ORANGE", "LEMON", "DATE", "JORDAN"], "reason": "Countries where a particular fruit grows"}, "ts": 1776473960.08799}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["JAY", "SWALLOW", "CRANE", "GOAT"], "reason": "Birds and their calls/male/female"}, "ts": 1776474014.735127}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["CHAD", "GOAT", "JORDAN", "KIWI"], "reason": "bird species names"}, "ts": 1776474063.2605388}

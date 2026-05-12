@@ -1,0 +1,13 @@
+{"event": "game_start", "data": {"words": ["TWIN", "BACKGAMMON", "KING", "CHERRY", "GO", "LOCKSMITH", "FULL", "CHESS", "RUBY", "CHECKERS", "STOP SIGN", "FLORIDA", "QUEEN", "FIRE TRUCK", "CRYPTOGRAPHY", "PIANO"], "solver": "snap_gvc"}, "ts": 1776473000.8859}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776473000.886306}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["KING", "QUEEN", "CHESS", "CHECKERS"], "category": "TYPES OF BOARD GAMES"}, "ts": 1776473009.662536}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["TWIN", "FULL", "KING", "QUEEN"], "actual_category": "MATTRESS SIZES"}, "ts": 1776473067.2272599}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["GO", "BACKGAMMON", "CHESS", "CHECKERS"], "actual_category": "BOARD GAMES"}, "ts": 1776473079.030443}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["CRYPTOGRAPHY", "CHERRY", "LOCKSMITH", "PIANO"], "category": "ITEMS THAT CAN HAVE A SECRET"}, "ts": 1776473149.919648}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["CHERRY", "RUBY", "PIANO", "LOCKSMITH"], "category": "FAMILIAR RED OBJECTS"}, "ts": 1776473230.114073}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["CHERRY", "PIANO", "LOCKSMITH", "RUBY"], "category": "CERTAIN COLORS"}, "ts": 1776473350.999348}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776473350.99964}
+{"event": "correct_guess", "data": {"phase": "snap", "guess": ["RUBY", "CHERRY", "FIRE TRUCK", "STOP SIGN"], "actual_category": "THINGS THAT ARE RED"}, "ts": 1776473355.26389}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776473355.2641401}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["CRYPTOGRAPHY", "FLORIDA", "LOCKSMITH", "PIANO"], "actual_category": "THINGS WITH KEYS"}, "ts": 1776473373.3809972}
+{"event": "game_end", "data": {"solved": [true, true, true, true], "metrics": {"failed_guesses": 4, "hallucinated_words": [], "solve_order": [1, 0, 2, 3], "total_llm_calls": 49, "wall_time_s": 372.5}}, "ts": 1776473373.3816261}

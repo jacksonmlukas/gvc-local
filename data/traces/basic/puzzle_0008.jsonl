@@ -1,0 +1,23 @@
+{"event": "game_start", "data": {"words": ["SQUASH", "FENCING", "POLO", "CORN", "TANK", "BEETLE", "ANT", "CRICKET", "CAMI", "CARROT", "ONION", "BEET", "TEE", "MANTIS", "TERMITE", "HALTER"], "categories": [{"group": "SPORTS", "level": 0, "members": ["CRICKET", "FENCING", "POLO", "SQUASH"]}, {"group": "TOPS", "level": 1, "members": ["CAMI", "HALTER", "TANK", "TEE"]}, {"group": "VEGETABLES", "level": 2, "members": ["BEET", "CARROT", "CORN", "ONION"]}, {"group": "INSECTS", "level": 3, "members": ["ANT", "BEETLE", "MANTIS", "TERMITE"]}]}, "ts": 1776469764.497629}
+{"event": "correct_guess", "data": {"guess": ["ONION", "CORN", "CARROT", "BEET"], "proposed_category": "TYPES_OF_VEGETABLES", "actual_category": "VEGETABLES", "level": 2}, "ts": 1776469774.431498}
+{"event": "wrong_guess", "data": {"guess": ["SQUASH", "MANTIS", "CAMI", "FENCING"], "category": "SPORTS_EQUIPMENT", "strikes": 1}, "ts": 1776469788.509592}
+{"event": "wrong_guess", "data": {"guess": ["BEETLE", "TANK", "POLO", "TEE"], "category": "SPORTS EQUIPMENT", "strikes": 2}, "ts": 1776469801.5778182}
+{"event": "wrong_guess", "data": {"guess": ["FENCING", "POLO", "TEE", "TANK"], "category": "SPORTS_EQUIPMENTS", "strikes": 3}, "ts": 1776469814.59469}
+{"event": "wrong_guess", "data": {"guess": ["BEETLE", "MANTIS", "SQUASH", "CRICKET"], "category": "INSECTS_FOUND_IN_BACKYARD_GARDENS", "strikes": 4}, "ts": 1776469827.9268632}
+{"event": "wrong_guess", "data": {"guess": ["CAMI", "FENCING", "SQUASH", "MANTIS"], "category": "TYPES_OF_MASKS", "strikes": 5}, "ts": 1776469837.4496691}
+{"event": "wrong_guess", "data": {"guess": ["SQUASH", "HALTER", "POLO", "CRICKET"], "category": "SPORTS EQUIPMENT", "strikes": 6}, "ts": 1776469850.3471391}
+{"event": "wrong_guess", "data": {"guess": ["CRICKET", "TERMITE", "ANT", "BEETLE"], "category": "INSECTS", "strikes": 7}, "ts": 1776469863.356297}
+{"event": "wrong_guess", "data": {"guess": ["HALTER", "CAMI", "MANTIS", "SQUASH"], "category": "SPORTS EQUIPMENT", "strikes": 8}, "ts": 1776469877.3610141}
+{"event": "wrong_guess", "data": {"guess": ["SQUASH", "CRICKET", "CAMI", "MANTIS"], "category": "EQUESTRIAN DISCIPLINES", "strikes": 9}, "ts": 1776469891.722839}
+{"event": "wrong_guess", "data": {"guess": ["CRICKET", "CAMI", "ANT", "TANK"], "category": "SPORTS EQUIPMENT", "strikes": 10}, "ts": 1776469907.0099049}
+{"event": "wrong_guess", "data": {"guess": ["CAMI", "FENCING", "SQUASH", "TANK"], "category": "SPORTING EQUIPMENT", "strikes": 11}, "ts": 1776469923.003383}
+{"event": "wrong_guess", "data": {"guess": ["CRICKET", "CAMI", "ANT", "MANTIS"], "category": "INSECT TYPES", "strikes": 12}, "ts": 1776469937.930442}
+{"event": "wrong_guess", "data": {"guess": ["TERMITE", "SQUASH", "POLO", "FENCING"], "category": "SPORTS EQUIPMENT", "strikes": 13}, "ts": 1776469953.8792791}
+{"event": "wrong_guess", "data": {"guess": ["CRICKET", "SQUASH", "HALTER", "POLO"], "category": "SPORTS_EQUIPMENT", "strikes": 14}, "ts": 1776469963.4102778}
+{"event": "wrong_guess", "data": {"guess": ["CRICKET", "SQUASH", "HALTER", "POLO"], "category": "TYPES_OF_RACQUET_SPORTS", "strikes": 15}, "ts": 1776469972.926208}
+{"event": "wrong_guess", "data": {"guess": ["MANTIS", "BEETLE", "CRICKET", "TEE"], "category": "INSECTS_PLAYED_IN_SPORTS", "strikes": 16}, "ts": 1776469989.92473}
+{"event": "wrong_guess", "data": {"guess": ["TERMITE", "TEE", "POLO", "SQUASH"], "category": "THINGS WITH SHELLS", "strikes": 17}, "ts": 1776470006.970892}
+{"event": "wrong_guess", "data": {"guess": ["BEETLE", "CRICKET", "MANTIS", "SQUASH"], "category": "INSECTS_FOUND_IN_BACKYARDS", "strikes": 18}, "ts": 1776470017.395067}
+{"event": "wrong_guess", "data": {"guess": ["TERMITE", "BEETLE", "TANK", "FENCING"], "category": "TYPES OF WRESTLING", "strikes": 19}, "ts": 1776470035.70826}
+{"event": "wrong_guess", "data": {"guess": ["BEETLE", "CRICKET", "MANTIS", "SQUASH"], "category": "KINDS OF INSECTS", "strikes": 20}, "ts": 1776470045.391979}
+{"event": "game_end", "data": {"solved": [false, false, true, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [], "solve_order": [2], "total_llm_calls": 37, "wall_time_s": 280.89}}, "ts": 1776470045.392201}

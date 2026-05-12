@@ -1,0 +1,9 @@
+{"event": "game_start", "data": {"words": ["ESSENCE", "PUMP", "SNEAKER", "WHY", "MILE", "BOOT", "US", "SEA", "LOAFER", "YARD", "ARE", "QUEUE", "LEAGUE", "TIME", "PEOPLE", "FOOT"], "solver": "snap_gvc"}, "ts": 1776471817.821089}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776471817.821387}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["SNEAKER", "LOAFER", "BOOT", "PUMP"], "actual_category": "FOOTWEAR"}, "ts": 1776471825.9468129}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["ESSENCE", "PEOPLE", "ARE", "TIME"], "category": "CONCEPTS OF PRESENCE"}, "ts": 1776471837.919714}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["FOOT", "YARD", "MILE", "LEAGUE"], "actual_category": "UNITS OF LENGTH"}, "ts": 1776471849.958954}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["TIME", "ESSENCE", "PEOPLE", "TIME"], "category": "CONCEPTS OF HUMAN LIFE"}, "ts": 1776471899.1023}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["PEOPLE", "US", "TIME", "ESSENCE"], "actual_category": "MAGAZINES"}, "ts": 1776471968.7977989}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["ARE", "SEA", "WHY", "QUEUE"], "actual_category": "LETTER HOMOPHONES"}, "ts": 1776471976.1345332}
+{"event": "game_end", "data": {"solved": [true, true, true, true], "metrics": {"failed_guesses": 2, "hallucinated_words": [], "solve_order": [0, 1, 2, 3], "total_llm_calls": 25, "wall_time_s": 158.31}}, "ts": 1776471976.134767}

@@ -1,0 +1,28 @@
+{"event": "game_start", "data": {"words": ["SNOW", "HAIL", "MOM", "RAIN", "JAZZ", "RACECAR", "BUCKS", "KAYAK", "HEAT", "TAB", "SLEET", "NETS", "SHIFT", "OPTION", "LEVEL", "RETURN"], "solver": "snap_gvc"}, "ts": 1776471334.720317}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776471334.7204359}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["NETS", "RAIN", "SLEET", "HAIL"], "category": "FORMS_OF_PRECIPITATION"}, "ts": 1776471335.8867059}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["LEVEL", "TAB", "RACECAR", "KAYAK"], "category": "Words That Are The Same When Spelled Forward And Backward"}, "ts": 1776471338.682891}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["MOM", "OPTION", "RETURN", "SHIFT"], "category": "PUBLIC STANDING"}, "ts": 1776471356.406434}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776471356.4069078}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RACECAR", "SLEET", "HAIL", "SNOW"], "reason": "Words that form a phrase when you reverse their spelling"}, "ts": 1776471356.638165}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RACECAR", "TAB", "NETS", "LEVEL"], "reason": "Words that are palindromes"}, "ts": 1776471367.087453}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RACECAR", "KAYAK", "BUCKS", "TAB"], "reason": "Palindromic words"}, "ts": 1776471380.7443168}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["SNOW", "HEAT", "SLEET", "RACECAR"], "reason": "Words are types of precipitation and types of vehicles that are spelled the same forwards and backwards"}, "ts": 1776471380.940607}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RACECAR", "RETURN", "LEVEL", "TAB"], "reason": "palindromes"}, "ts": 1776471388.82697}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RACECAR", "KAYAK", "SHIFT", "TAB"], "reason": "Palindromic words"}, "ts": 1776471393.094004}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RACECAR", "KAYAK", "OPTION", "TAB"], "reason": "Palindromic words"}, "ts": 1776471400.869216}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["HEAT", "BUCKS", "RACECAR", "TAB"], "reason": "All words can be typed using one hand on a standard QWERTY keyboard layout"}, "ts": 1776471415.959777}
+{"event": "correct_guess", "data": {"phase": "snap", "guess": ["HAIL", "RAIN", "SLEET", "SNOW"], "actual_category": "WET WEATHER"}, "ts": 1776471428.778739}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776471428.7791538}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["BUCKS", "HEAT", "JAZZ", "NETS"], "actual_category": "NBA TEAMS"}, "ts": 1776471446.913806}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["LEVEL", "SHIFT", "KAYAK", "RACECAR"], "category": "PALINDROMES"}, "ts": 1776471503.035747}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["LEVEL", "TAB", "SHIFT", "RETURN"], "category": "TYPES_OF_KEYBOARDS"}, "ts": 1776471521.3626099}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["KAYAK", "LEVEL", "RETURN", "TAB"], "category": "PALINDROMES"}, "ts": 1776471610.081096}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776471610.081533}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RETURN", "RACECAR", "KAYAK", "TAB"], "reason": "Words that are palindromes, meaning they can be read the same forward and backward"}, "ts": 1776471615.4747689}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["KAYAK", "RACECAR", "TAB", "MOM"], "reason": "Palindromes are words, phrases, or sequences that read the same backward as forward."}, "ts": 1776471649.941222}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["KAYAK", "LEVEL", "RETURN", "SHIFT"], "reason": "All four words can be typed using only the left hand on a standard keyboard."}, "ts": 1776471690.291745}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["KAYAK", "RACECAR", "OPTION", "RETURN"], "reason": "Words are English words that are also palindromes"}, "ts": 1776471772.874228}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RACECAR", "LEVEL", "KAYAK", "RETURN"], "reason": "Words are palindromes"}, "ts": 1776471777.175276}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["RACECAR", "KAYAK", "RETURN", "SHIFT"], "reason": "Words that are palindromes"}, "ts": 1776471815.811679}
+{"event": "game_end", "data": {"solved": [true, true, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [], "solve_order": [0, 1], "total_llm_calls": 94, "wall_time_s": 481.09}}, "ts": 1776471815.8130891}

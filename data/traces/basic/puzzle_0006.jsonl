@@ -1,0 +1,24 @@
+{"event": "game_start", "data": {"words": ["THIGH", "KNEE", "CRAY", "KID", "CUB", "STAR", "JOEY", "JELLY", "CAN", "SHIN", "SILVER", "HEAD", "CALF", "JOHN", "ANKLE", "THRONE"], "categories": [{"group": "LEG PARTS", "level": 0, "members": ["ANKLE", "KNEE", "SHIN", "THIGH"]}, {"group": "BABY ANIMALS", "level": 1, "members": ["CALF", "CUB", "JOEY", "KID"]}, {"group": "SLANG FOR TOILET", "level": 2, "members": ["CAN", "HEAD", "JOHN", "THRONE"]}, {"group": "___ FISH THAT AREN\u2019T FISH", "level": 3, "members": ["CRAY", "JELLY", "SILVER", "STAR"]}]}, "ts": 1776469295.6842518}
+{"event": "wrong_guess", "data": {"guess": ["KID", "CALF", "JOEY", "CRAY"], "category": "BABY_ANIMALS", "strikes": 1}, "ts": 1776469296.4687}
+{"event": "wrong_guess", "data": {"guess": ["JOEY", "KID", "CALF", "CRAY"], "category": "MONOPOLY PIECES", "strikes": 2}, "ts": 1776469304.352351}
+{"event": "wrong_guess", "data": {"guess": ["CALF", "KNEE", "KID", "THIGH"], "category": "LEG PARTS", "strikes": 3}, "ts": 1776469318.483145}
+{"event": "wrong_guess", "data": {"guess": ["CALF", "CRAY", "JOEY", "KID"], "category": "BABY ANIMALS", "strikes": 4}, "ts": 1776469329.130937}
+{"event": "wrong_guess", "data": {"guess": ["CALF", "SHIN", "THIGH", "KNEE"], "category": "LEG PARTS", "strikes": 5}, "ts": 1776469345.6216269}
+{"event": "wrong_guess", "data": {"guess": ["CALF", "KID", "JOEY", "CRAY"], "category": "BABY ANIMALS", "strikes": 6}, "ts": 1776469354.324903}
+{"event": "correct_guess", "data": {"guess": ["CALF", "JOEY", "KID", "CUB"], "proposed_category": "BABY ANIMALS", "actual_category": "BABY ANIMALS", "level": 1}, "ts": 1776469371.625002}
+{"event": "wrong_guess", "data": {"guess": ["CRAY", "CAN", "KNEE", "THIGH"], "category": "BODY PARTS", "strikes": 7}, "ts": 1776469386.8833401}
+{"event": "correct_guess", "data": {"guess": ["SHIN", "KNEE", "THIGH", "ANKLE"], "proposed_category": "LEG PARTS", "actual_category": "LEG PARTS", "level": 0}, "ts": 1776469402.352973}
+{"event": "wrong_guess", "data": {"guess": ["THRONE", "CRAY", "CAN", "JOHN"], "category": "KINGS", "strikes": 8}, "ts": 1776469417.864253}
+{"event": "wrong_guess", "data": {"guess": ["CRAY", "CAN", "JOHN", "THRONE"], "category": "TYPES_OF_COLOR", "strikes": 9}, "ts": 1776469427.642667}
+{"event": "wrong_guess", "data": {"guess": ["CAN", "CRAY", "SILVER", "STAR"], "category": "COLOR NAMED AFTER A METALLIC ELEMENT", "strikes": 10}, "ts": 1776469444.84929}
+{"event": "wrong_guess", "data": {"guess": ["CAN", "CRAY", "SILVER", "STAR"], "category": "RANKS", "strikes": 11}, "ts": 1776469454.582355}
+{"event": "wrong_guess", "data": {"guess": ["CALF", "CRAY", "THRONE", "KNEE"], "category": "LEG PARTS", "strikes": 12}, "ts": 1776469464.013929}
+{"event": "wrong_guess", "data": {"guess": ["JOHN", "THRONE", "CRAY", "SILVER"], "category": "ROYALTY", "strikes": 13}, "ts": 1776469467.785795}
+{"event": "wrong_guess", "data": {"guess": ["JOHN", "SILVER", "CRAY", "THRONE"], "category": "RANKS", "strikes": 14}, "ts": 1776469477.294772}
+{"event": "wrong_guess", "data": {"guess": ["CRAY", "CAN", "STAR", "SILVER"], "category": "PRIZES_IN_A_GAME_SHOW", "strikes": 15}, "ts": 1776469484.783094}
+{"event": "wrong_guess", "data": {"guess": ["SILVER", "STAR", "CAN", "CRAY"], "category": "AWARD_TITLES", "strikes": 16}, "ts": 1776469494.411942}
+{"event": "wrong_guess", "data": {"guess": ["SILVER", "CRAY", "STAR", "CAN"], "category": "RANKS_IN_RACING", "strikes": 17}, "ts": 1776469503.814255}
+{"event": "wrong_guess", "data": {"guess": ["CRAY", "CAN", "SILVER", "STAR"], "category": "ART SUPPLIES OR AWARDS", "strikes": 18}, "ts": 1776469514.313312}
+{"event": "wrong_guess", "data": {"guess": ["CAN", "CRAY", "SILVER", "STAR"], "category": "COLORFUL OBJECTS", "strikes": 19}, "ts": 1776469522.976373}
+{"event": "wrong_guess", "data": {"guess": ["STAR", "CAN", "CRAY", "SILVER"], "category": "MUSICALS BEGINNING WITH \"C\"", "strikes": 20}, "ts": 1776469533.4704828}
+{"event": "game_end", "data": {"solved": [true, true, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [["CALF", "KNEE"]], "solve_order": [1, 0], "total_llm_calls": 31, "wall_time_s": 237.79}}, "ts": 1776469533.470665}

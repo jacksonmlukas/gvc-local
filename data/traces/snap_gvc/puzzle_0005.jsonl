@@ -1,0 +1,24 @@
+{"event": "game_start", "data": {"words": ["SIN", "POWDER", "ROYAL", "ICE CUBE", "GO", "FUTURE", "WONDER", "CHANCE", "SEA", "Q-TIP", "BABY", "COMMON", "SISTER", "BOARDWALK", "MIDNIGHT", "JAIL"], "solver": "snap_gvc"}, "ts": 1776472626.579617}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776472626.5798569}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["WONDER", "CHANCE", "BOARDWALK", "FUTURE"], "category": "ARCADE GAME BOARD NAMES"}, "ts": 1776472635.46409}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["SEA", "POWDER", "JAIL", "GO"], "category": "MONOPOLY SQUARES"}, "ts": 1776472647.751605}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["BABY", "Q-TIP", "MIDNIGHT", "JAIL"], "category": "MONOPOLY SQUARES"}, "ts": 1776472660.653876}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776472660.6544352}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["SISTER", "SEA", "POWDER", "SIN"], "reason": "Four words that can have 'sugar' as a suffix"}, "ts": 1776472670.40154}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["MIDNIGHT", "BABY", "ICE CUBE", "COMMON"], "reason": "Groupings are about common themes, so this group shares a specific relationship"}, "ts": 1776472678.637988}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["ICE CUBE", "ROYAL", "COMMON", "MIDNIGHT"], "reason": "Members of the Wu-Tang Clan"}, "ts": 1776472687.479699}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["BABY", "SISTER", "JAIL", "Q-TIP"], "reason": "Items used in various life stages or milestones"}, "ts": 1776472691.756441}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["ROYAL", "CHANCE", "FUTURE", "BOARDWALK"], "reason": "These four words are related to concepts or items commonly found in or associated with casinos."}, "ts": 1776472698.299468}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["SIN", "JAIL", "SEA", "BOARDWALK"], "reason": "These words are related to the concept of being 'sentenced' to a place or state."}, "ts": 1776472706.0318332}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["POWDER", "Q-TIP", "SIN", "JAIL"], "reason": "Terms associated with 12-step programs"}, "ts": 1776472718.069064}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["ICE CUBE", "Q-TIP", "COMMON", "CHANCE"], "reason": "Rappers"}, "ts": 1776472726.665243}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["BABY", "COMMON", "ICE CUBE", "Q-TIP"], "reason": "Words related to a person's stage of life or condition"}, "ts": 1776472731.056403}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["CHANCE", "POWDER", "Q-TIP", "ROYAL"], "reason": "Words related to things you might use or buy at an amusement park"}, "ts": 1776472734.3549361}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["POWDER", "Q-TIP", "SIN", "ICE CUBE"], "reason": "They are all types of 'powder' products when used to address specific body issues"}, "ts": 1776472744.1057248}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["FUTURE", "ICE CUBE", "JAIL", "ROYAL"], "reason": "Words related to the last part of the alphabet in a sequence or name"}, "ts": 1776472748.4298291}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["Q-TIP", "POWDER", "BABY", "COMMON"], "reason": "Words relate to items that can be used in a beauty routine"}, "ts": 1776472763.78003}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["ICE CUBE", "Q-TIP", "CHANCE", "ROYAL"], "reason": "Rappers"}, "ts": 1776472769.102468}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["POWDER", "Q-TIP", "ICE CUBE", "JAIL"], "reason": "Items used to put something in (POWDER, Q-TIP, ICE CUBE, JAIL)"}, "ts": 1776472773.3646169}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["Q-TIP", "POWDER", "ICE CUBE", "SISTER"], "reason": "Common use of Q-Tip as a generic name for a product used by all except MIDNIGHT"}, "ts": 1776472778.757833}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["ICE CUBE", "COMMON", "CHANCE", "ROYAL"], "reason": "They are all members of the Wu-Tang Clan and Wu-Tang-affiliated groups"}, "ts": 1776472795.207892}
+{"event": "game_end", "data": {"solved": [false, false, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [], "solve_order": [], "total_llm_calls": 37, "wall_time_s": 168.63}}, "ts": 1776472795.208999}

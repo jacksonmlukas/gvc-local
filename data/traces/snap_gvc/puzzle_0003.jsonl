@@ -1,0 +1,9 @@
+{"event": "game_start", "data": {"words": ["CATS", "SPIDER", "NIKE", "PUMA", "ADIDAS", "SWEEP", "SUPER", "CABARET", "VACUUM", "IRON", "DUST", "CHICAGO", "REEBOK", "MOP", "CAROUSEL", "BAT"], "solver": "snap_gvc"}, "ts": 1776472350.306473}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776472350.306852}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["CABARET", "CAROUSEL", "BAT", "SPIDER"], "category": "THINGS WITH WINGS (OR WING-LIKE STRUCTURES)"}, "ts": 1776472351.004867}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["CAROUSEL", "CABARET", "CATS", "CHICAGO"], "actual_category": "MUSICALS BEGINNING WITH \u201cC\u201d"}, "ts": 1776472354.6475499}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["VACUUM", "MOP", "DUST", "SWEEP"], "actual_category": "CLEANING VERBS"}, "ts": 1776472382.843818}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["IRON", "SUPER", "REEBOK", "PUMA"], "category": "SNEAKER BRANDS"}, "ts": 1776472394.901443}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["NIKE", "ADIDAS", "REEBOK", "PUMA"], "actual_category": "SNEAKER BRANDS"}, "ts": 1776472406.810286}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["SPIDER", "BAT", "SUPER", "IRON"], "actual_category": "___ MAN SUPERHEROES"}, "ts": 1776472414.280639}
+{"event": "game_end", "data": {"solved": [true, true, true, true], "metrics": {"failed_guesses": 2, "hallucinated_words": [], "solve_order": [1, 2, 0, 3], "total_llm_calls": 13, "wall_time_s": 63.98}}, "ts": 1776472414.281587}

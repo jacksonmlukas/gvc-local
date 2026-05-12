@@ -1,0 +1,23 @@
+{"event": "game_start", "data": {"words": ["CHERRY", "KING", "STOP SIGN", "QUEEN", "FIRE TRUCK", "TWIN", "LOCKSMITH", "CHESS", "CRYPTOGRAPHY", "GO", "BACKGAMMON", "PIANO", "FLORIDA", "CHECKERS", "FULL", "RUBY"], "categories": [{"group": "BOARD GAMES", "level": 0, "members": ["BACKGAMMON", "CHECKERS", "CHESS", "GO"]}, {"group": "MATTRESS SIZES", "level": 1, "members": ["FULL", "KING", "QUEEN", "TWIN"]}, {"group": "THINGS THAT ARE RED", "level": 2, "members": ["CHERRY", "FIRE TRUCK", "RUBY", "STOP SIGN"]}, {"group": "THINGS WITH KEYS", "level": 3, "members": ["CRYPTOGRAPHY", "FLORIDA", "LOCKSMITH", "PIANO"]}]}, "ts": 1776469560.018663}
+{"event": "wrong_guess", "data": {"guess": ["PIANO", "KING", "CHESS", "QUEEN"], "category": "PIECES IN A STRATEGY GAME", "strikes": 1}, "ts": 1776469560.96539}
+{"event": "wrong_guess", "data": {"guess": ["FIRE TRUCK", "POLICE CAR", "AMBULANCE", "TAXICAB"], "category": "TYPES_OF_EMERGENCY_VEHICLES", "strikes": 2}, "ts": 1776469561.378248}
+{"event": "correct_guess", "data": {"guess": ["CHECKERS", "CHESS", "BACKGAMMON", "GO"], "proposed_category": "BOARD GAMES", "actual_category": "BOARD GAMES", "level": 0}, "ts": 1776469564.0672672}
+{"event": "wrong_guess", "data": {"guess": ["TWIN", "LOCKSMITH", "CRYPTOGRAPHY", "STOP SIGN"], "category": "SECURITY", "strikes": 3}, "ts": 1776469576.942846}
+{"event": "wrong_guess", "data": {"guess": ["KING", "QUEEN", "ROYAL", "REGAL"], "category": "ROYALTY", "strikes": 4}, "ts": 1776469584.360609}
+{"event": "wrong_guess", "data": {"guess": ["PIANO", "KING", "QUEEN", "REGAL"], "category": "ROYAL TITLES", "strikes": 5}, "ts": 1776469591.8950021}
+{"event": "wrong_guess", "data": {"guess": ["CRYPTOGRAPHY", "STOP SIGN", "LOCKSMITH", "TWIN"], "category": "TYPE OF KEY (Cryptographic keys, Stop signs, Locksmiths, and Twins)", "strikes": 6}, "ts": 1776469599.314084}
+{"event": "wrong_guess", "data": {"guess": ["QUEEN", "KING", "RUBY", "CHERRY"], "category": "PRECIOUS GEMSTONES", "strikes": 7}, "ts": 1776469614.7313359}
+{"event": "wrong_guess", "data": {"guess": ["KING", "QUEEN", "ROYAL", "REGAL"], "category": "RANKS", "strikes": 8}, "ts": 1776469622.609636}
+{"event": "wrong_guess", "data": {"guess": ["KING", "BACHELOR", "MAID", "QUEEN"], "category": "CARD TITLES", "strikes": 9}, "ts": 1776469631.3453052}
+{"event": "wrong_guess", "data": {"guess": ["FULL", "PIANO", "RUBY", "QUEEN"], "category": "RANK OR TITLE", "strikes": 10}, "ts": 1776469646.680916}
+{"event": "wrong_guess", "data": {"guess": ["KING", "PIANO", "QUEEN", "REGAL"], "category": "RANK", "strikes": 11}, "ts": 1776469656.302478}
+{"event": "wrong_guess", "data": {"guess": ["KING", "QUEEN", "FLORIDA", "RUBY"], "category": "US_STATES", "strikes": 12}, "ts": 1776469669.2933109}
+{"event": "wrong_guess", "data": {"guess": ["FIRE TRUCK", "CRYPTOGRAPHY", "LOCKSMITH", "STOP SIGN"], "category": "PROFESSIONAL OCCUPATIONS", "strikes": 13}, "ts": 1776469686.4101539}
+{"event": "wrong_guess", "data": {"guess": ["RUBY", "KING", "QUEEN", "CHERRY"], "category": "PRECIOUS STONES AND COLOURS", "strikes": 14}, "ts": 1776469696.137177}
+{"event": "wrong_guess", "data": {"guess": ["KING", "QUEEN", "REGAL", "ROYAL"], "category": "THINGS OF HIGH SOCIAL STATUS", "strikes": 15}, "ts": 1776469705.8479779}
+{"event": "wrong_guess", "data": {"guess": ["KING", "PIANO", "QUEEN", "BACHELOR"], "category": "RANK or CARD RANK", "strikes": 16}, "ts": 1776469714.495071}
+{"event": "wrong_guess", "data": {"guess": ["PIANO", "FULL", "RUBY", "KING"], "category": "KINDS OF PIANO KEYS", "strikes": 17}, "ts": 1776469732.1921449}
+{"event": "wrong_guess", "data": {"guess": ["LOCKSMITH", "CRYPTOGRAPHY", "STOP SIGN", "TWIN"], "category": "SECURITY_MEASURES", "strikes": 18}, "ts": 1776469743.854327}
+{"event": "wrong_guess", "data": {"guess": ["KING", "PIANO", "QUEEN", "REGAL"], "category": "RANK", "strikes": 19}, "ts": 1776469753.382016}
+{"event": "wrong_guess", "data": {"guess": ["KING", "QUEEN", "REGAL", "ROYAL"], "category": "MONARCHY RANKS", "strikes": 20}, "ts": 1776469762.494308}
+{"event": "game_end", "data": {"solved": [true, false, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [["POLICE CAR", "AMBULANCE", "TAXICAB"], ["ROYAL", "REGAL"], ["REGAL"], ["ROYAL", "REGAL"], ["BACHELOR", "MAID"], ["REGAL"], ["REGAL", "ROYAL"], ["BACHELOR"], ["REGAL"], ["REGAL", "ROYAL"]], "solve_order": [0], "total_llm_calls": 29, "wall_time_s": 202.48}}, "ts": 1776469762.4945762}

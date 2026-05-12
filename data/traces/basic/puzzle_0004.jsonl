@@ -1,0 +1,22 @@
+{"event": "game_start", "data": {"words": ["PLUM", "GREEN", "RELISH", "GLUM", "TARTAR", "HULU", "NETFLIX", "MUSTARD", "LOW", "KETCHUP", "DOWN", "PEACOCK", "SCARLET", "MAYO", "PRIME", "BLUE"], "categories": [{"group": "STREAMING SERVICES", "level": 0, "members": ["HULU", "NETFLIX", "PEACOCK", "PRIME"]}, {"group": "CONDIMENTS", "level": 1, "members": ["KETCHUP", "MAYO", "RELISH", "TARTAR"]}, {"group": "SYNONYMS FOR SAD", "level": 2, "members": ["BLUE", "DOWN", "GLUM", "LOW"]}, {"group": "CLUE CHARACTERS", "level": 3, "members": ["GREEN", "MUSTARD", "PLUM", "SCARLET"]}]}, "ts": 1776468792.376096}
+{"event": "wrong_guess", "data": {"guess": ["PRIME", "PEACOCK", "PLUM", "GLUM"], "category": "SYNONYMS_FOR_SAD", "strikes": 1}, "ts": 1776468793.57349}
+{"event": "wrong_guess", "data": {"guess": ["TARTAR", "RELISH", "MUSTARD", "KETCHUP"], "category": "CONDIMENTS", "strikes": 2}, "ts": 1776468804.414984}
+{"event": "wrong_guess", "data": {"guess": ["PRIME", "PLUM", "PEACOCK", "SCARLET"], "category": "COLOURS OF A PRIME RIB RIBBON", "strikes": 3}, "ts": 1776468817.520383}
+{"event": "wrong_guess", "data": {"guess": ["TARTAR", "KETCHUP", "RELISH", "MUSTARD"], "category": "CONDIMENTS", "strikes": 4}, "ts": 1776468826.03415}
+{"event": "wrong_guess", "data": {"guess": ["GLUM", "PRIME", "SCARLET", "PLUM"], "category": "RARE COLORS", "strikes": 5}, "ts": 1776468839.142036}
+{"event": "wrong_guess", "data": {"guess": ["PLUM", "RELISH", "KETCHUP", "MUSTARD"], "category": "CONDIMENTS", "strikes": 6}, "ts": 1776468853.006283}
+{"event": "wrong_guess", "data": {"guess": ["PRIME", "PLUM", "SCARLET", "PEACOCK"], "category": "COLORS_OF_THE_RAINBOW", "strikes": 7}, "ts": 1776468861.569313}
+{"event": "wrong_guess", "data": {"guess": ["PEACOCK", "PLUM", "PRIME", "SCARLET"], "category": "COLORS_OF_A_ROYAL_CROWN", "strikes": 8}, "ts": 1776468870.247154}
+{"event": "wrong_guess", "data": {"guess": ["PEACOCK", "PLUM", "PRIME", "SCARLET"], "category": "COLOURS", "strikes": 9}, "ts": 1776468879.020986}
+{"event": "wrong_guess", "data": {"guess": ["RELISH", "MUSTARD", "KETCHUP", "MAYO"], "category": "CONDIMENTS", "strikes": 10}, "ts": 1776468894.233601}
+{"event": "wrong_guess", "data": {"guess": ["RELISH", "MUSTARD", "KETCHUP", "MAYO"], "category": "CONDIMENTS", "strikes": 11}, "ts": 1776468902.664593}
+{"event": "wrong_guess", "data": {"guess": ["DOWN", "LOW", "GLUM", "PLUM"], "category": "ADJECTIVE FORMATIONS OF 'UP'", "strikes": 12}, "ts": 1776468919.844029}
+{"event": "wrong_guess", "data": {"guess": ["DOWN", "GLUM", "LOW", "PLUM"], "category": "DEEPER", "strikes": 13}, "ts": 1776468931.4087539}
+{"event": "wrong_guess", "data": {"guess": ["MUSTARD", "SCARLET", "GREEN", "TARTAR"], "category": "COLORS OR SPICES USED TO DESCRIPTION", "strikes": 14}, "ts": 1776468948.492455}
+{"event": "wrong_guess", "data": {"guess": ["TARTAR", "BLUE", "PLUM", "PEACOCK"], "category": "COLORS AND FOODS", "strikes": 15}, "ts": 1776468965.713142}
+{"event": "wrong_guess", "data": {"guess": ["TARTAR", "PEACOCK", "PRIME", "SCARLET"], "category": "COLORS_ASSOCIATED_WITH_CHEFS", "strikes": 16}, "ts": 1776468982.636727}
+{"event": "wrong_guess", "data": {"guess": ["HULU", "NETFLIX", "BLUE", "GREEN"], "category": "STREAMING SERVICES", "strikes": 17}, "ts": 1776468997.869695}
+{"event": "wrong_guess", "data": {"guess": ["TARTAR", "KETCHUP", "MUSTARD", "RELISH"], "category": "CONDIMENTS", "strikes": 18}, "ts": 1776469009.437932}
+{"event": "wrong_guess", "data": {"guess": ["GLUM", "PLUM", "PRIME", "SCARLET"], "category": "SHADING COLOR TERMS", "strikes": 19}, "ts": 1776469018.837989}
+{"event": "wrong_guess", "data": {"guess": ["MAYO", "LOW", "GREEN", "TARTAR"], "category": "CONDIMENTS", "strikes": 20}, "ts": 1776469036.0613408}
+{"event": "game_end", "data": {"solved": [false, false, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [], "solve_order": [], "total_llm_calls": 32, "wall_time_s": 243.69}}, "ts": 1776469036.062439}

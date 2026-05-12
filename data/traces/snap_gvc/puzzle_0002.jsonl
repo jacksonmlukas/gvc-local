@@ -1,0 +1,15 @@
+{"event": "game_start", "data": {"words": ["STOOGE", "CHEEK", "LAB", "MOUTH", "TENOR", "NOSE", "POM", "PIT", "SCARF", "PEKE", "GOBBLE", "CHOW", "WOLF", "KING", "AMIGO", "EYE"], "solver": "snap_gvc"}, "ts": 1776471978.14202}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776471978.1424708}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["CHEEK", "MOUTH", "NOSE", "EYE"], "actual_category": "FACIAL FEATURES"}, "ts": 1776471980.775664}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["GOBBLE", "STOOGE", "SCARF", "AMIGO"], "category": "PHRASES_STARTING_WITH_THE_WORD_GO"}, "ts": 1776472000.4146938}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["CHOW", "PEKE", "POM", "LAB"], "category": "DOG BREEDS"}, "ts": 1776472049.284327}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["PIT", "PEKE", "POM", "LAB"], "actual_category": "DOG BREEDS, INFORMALLY"}, "ts": 1776472061.58947}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["KING", "WOLF", "TENOR", "CHOW"], "category": "ANIMALS_FOUND_IN_GAME"}, "ts": 1776472159.8195121}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["CHOW", "SCARF", "GOBBLE", "KING"], "category": "TYPES_OF_MEALS"}, "ts": 1776472194.176866}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["WOLF", "TENOR", "KING", "STOOGE"], "category": "FORMS OF MOCKERY"}, "ts": 1776472307.787415}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776472307.788451}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["CHOW", "WOLF", "AMIGO", "SCARF"], "reason": "Types of dogs"}, "ts": 1776472312.08222}
+{"event": "correct_guess", "data": {"phase": "snap", "guess": ["GOBBLE", "SCARF", "CHOW", "WOLF"], "actual_category": "SYNONYMS FOR EAT"}, "ts": 1776472315.773205}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776472315.773389}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["KING", "STOOGE", "TENOR", "AMIGO"], "actual_category": "MEMBERS OF A TRIO"}, "ts": 1776472331.096708}
+{"event": "game_end", "data": {"solved": [true, true, true, true], "metrics": {"failed_guesses": 6, "hallucinated_words": [], "solve_order": [0, 2, 1, 3], "total_llm_calls": 53, "wall_time_s": 352.95}}, "ts": 1776472331.096837}

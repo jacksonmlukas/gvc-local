@@ -1,0 +1,22 @@
+{"event": "game_start", "data": {"words": ["JAIL", "BOARDWALK", "ROYAL", "MIDNIGHT", "GO", "COMMON", "WONDER", "FUTURE", "SEA", "BABY", "SISTER", "CHANCE", "ICE CUBE", "SIN", "POWDER", "Q-TIP"], "categories": [{"group": "MONOPOLY SQUARES", "level": 0, "members": ["BOARDWALK", "CHANCE", "GO", "JAIL"]}, {"group": "SHADES OF BLUE", "level": 1, "members": ["BABY", "MIDNIGHT", "POWDER", "ROYAL"]}, {"group": "RAPPERS", "level": 2, "members": ["COMMON", "FUTURE", "ICE CUBE", "Q-TIP"]}, {"group": "MEMBERS OF A SEPTET", "level": 3, "members": ["SEA", "SIN", "SISTER", "WONDER"]}]}, "ts": 1776469038.074184}
+{"event": "wrong_guess", "data": {"guess": ["WONDER", "FUTURE", "CHANCE", "POWDER"], "category": "FORMS_OF_MATTER", "strikes": 1}, "ts": 1776469049.473963}
+{"event": "wrong_guess", "data": {"guess": ["POWDER", "MIDNIGHT", "WONDER", "SEA"], "category": "CONDIMENTS", "strikes": 2}, "ts": 1776469061.6826198}
+{"event": "wrong_guess", "data": {"guess": ["CHANCE", "FUTURE", "POWDER", "WONDER"], "category": "KINDS OF DICE", "strikes": 3}, "ts": 1776469070.468025}
+{"event": "wrong_guess", "data": {"guess": ["JAIL", "BABY", "SIN", "CHANCE"], "category": "FORMS OF GAMBLING", "strikes": 4}, "ts": 1776469084.697761}
+{"event": "wrong_guess", "data": {"guess": ["SEA", "ICE CUBE", "BABY", "CHANCE"], "category": "COMMON PHRASES USED IN RAP SONGS", "strikes": 5}, "ts": 1776469097.192816}
+{"event": "wrong_guess", "data": {"guess": ["KETCHUP", "MAYO", "MUSTARD", "RELISH"], "category": "CONDIMENTS", "strikes": 6}, "ts": 1776469104.6677618}
+{"event": "wrong_guess", "data": {"guess": ["ICE CUBE", "BABY", "SIN", "JAIL"], "category": "RAP ALBUM TITLES BY ICE CUBE", "strikes": 7}, "ts": 1776469119.832927}
+{"event": "wrong_guess", "data": {"guess": ["Q-TIP", "JAIL", "POWDER", "ICE CUBE"], "category": "BEAUTY PRODUCTS, PRISON TERMS, COFFEE TOPPINGS, RAP GROUP MEMBERS", "strikes": 8}, "ts": 1776469135.709804}
+{"event": "wrong_guess", "data": {"guess": ["ICE CUBE", "SISTER", "WONDER", "FUTURE"], "category": "RAPPERS", "strikes": 9}, "ts": 1776469150.952252}
+{"event": "wrong_guess", "data": {"guess": ["BABY", "CHANCE", "FUTURE", "WONDER"], "category": "BAPTISMS", "strikes": 10}, "ts": 1776469166.054709}
+{"event": "wrong_guess", "data": {"guess": ["JAIL", "BABY", "CHANCE", "WONDER"], "category": "BABY, JAIL, CHANCE, WONDER", "strikes": 11}, "ts": 1776469180.033333}
+{"event": "wrong_guess", "data": {"guess": ["MIDNIGHT", "SEA", "ROYAL", "BOARDWALK"], "category": "MONOPOLY SQUARES", "strikes": 12}, "ts": 1776469196.077545}
+{"event": "wrong_guess", "data": {"guess": ["BABY", "CHANCE", "FUTURE", "WONDER"], "category": "FORMS OF THE WORD \"BABY\"", "strikes": 13}, "ts": 1776469206.531017}
+{"event": "wrong_guess", "data": {"guess": ["BOARDWALK", "MIDNIGHT", "ROYAL", "FUTURE"], "category": "MONOPOLY SQUARES", "strikes": 14}, "ts": 1776469216.487829}
+{"event": "wrong_guess", "data": {"guess": ["CHANCE", "FUTURE", "POWDER", "WONDER"], "category": "RAPPERS", "strikes": 15}, "ts": 1776469225.9285219}
+{"event": "wrong_guess", "data": {"guess": ["CHANCE", "FUTURE", "POWDER", "WONDER"], "category": "THINGS YOU MIGHT FIND IN A CASINO", "strikes": 16}, "ts": 1776469236.5608451}
+{"event": "wrong_guess", "data": {"guess": ["BABY", "CHANCE", "FUTURE", "WONDER"], "category": "ADULTS IN DISNEY MOVIES", "strikes": 17}, "ts": 1776469245.277898}
+{"event": "wrong_guess", "data": {"guess": ["ICE CUBE", "JAIL", "POWDER", "Q-TIP"], "category": "COSMETICS", "strikes": 18}, "ts": 1776469254.071786}
+{"event": "wrong_guess", "data": {"guess": ["CHANCE", "FUTURE", "WONDER", "BABY"], "category": "BIRTH", "strikes": 19}, "ts": 1776469267.669878}
+{"event": "wrong_guess", "data": {"guess": ["BABY", "CHANCE", "FUTURE", "WONDER"], "category": "CHILDREN'S BOOK SERIES", "strikes": 20}, "ts": 1776469280.389704}
+{"event": "game_end", "data": {"solved": [false, false, false, false], "metrics": {"failed_guesses": 20, "hallucinated_words": [["KETCHUP", "MAYO", "MUSTARD", "RELISH"]], "solve_order": [], "total_llm_calls": 31, "wall_time_s": 242.32}}, "ts": 1776469280.38991}

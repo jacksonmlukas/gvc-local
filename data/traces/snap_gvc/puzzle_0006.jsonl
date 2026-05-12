@@ -1,0 +1,20 @@
+{"event": "game_start", "data": {"words": ["JOEY", "JELLY", "CALF", "THRONE", "CAN", "KID", "SILVER", "THIGH", "KNEE", "CRAY", "HEAD", "JOHN", "CUB", "SHIN", "STAR", "ANKLE"], "solver": "snap_gvc"}, "ts": 1776472811.744538}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776472811.74508}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["KID", "CUB", "JOHN", "JOEY"], "category": "PET NAMES FOR BOYS"}, "ts": 1776472812.513577}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["CALF", "KID", "CUB", "JOEY"], "actual_category": "BABY ANIMALS"}, "ts": 1776472818.144783}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["SHIN", "THIGH", "KNEE", "ANKLE"], "actual_category": "LEG PARTS"}, "ts": 1776472830.0230021}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["STAR", "SILVER", "THRONE", "HEAD"], "category": "ROYAL TERMS"}, "ts": 1776472877.432464}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["STAR", "THRONE", "SILVER", "CRAY"], "category": "RANKS"}, "ts": 1776472889.615538}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["CAN", "CRAY", "THRONE", "SILVER"], "category": "CONTAINERS"}, "ts": 1776472946.621496}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776472946.622036}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["JOHN", "STAR", "CRAY", "CAN"], "reason": "Connection through the name of a character from a comic strip"}, "ts": 1776472949.884439}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["HEAD", "SILVER", "CAN", "STAR"], "reason": "Color associations"}, "ts": 1776472956.592612}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["JOHN", "STAR", "CAN", "HEAD"], "reason": "They are all names of US Presidents, in order and without their last names"}, "ts": 1776472958.913028}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["CRAY", "CAN", "JELLY", "SILVER"], "reason": "The connection is that some words are names of colors or types of colors."}, "ts": 1776472963.2779148}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["THRONE", "CRAY", "JELLY", "STAR"], "reason": "Names of royal associations (throne) or objects related to a drawing tool (cray) or food that is often associated with a particular jelly"}, "ts": 1776472970.103415}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["JELLY", "CRAY", "JOHN", "CAN"], "reason": "Characters from Lewis Carroll's Alice's Adventures in Wonderland"}, "ts": 1776472979.04656}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["JOHN", "THRONE", "STAR", "HEAD"], "reason": "Connection to a king in chess"}, "ts": 1776472987.104806}
+{"event": "correct_guess", "data": {"phase": "snap", "guess": ["CRAY", "JELLY", "STAR", "SILVER"], "actual_category": "___ FISH THAT AREN\u2019T FISH"}, "ts": 1776472990.33873}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776472990.338937}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["THRONE", "JOHN", "CAN", "HEAD"], "actual_category": "SLANG FOR TOILET"}, "ts": 1776472998.8802502}
+{"event": "game_end", "data": {"solved": [true, true, true, true], "metrics": {"failed_guesses": 11, "hallucinated_words": [], "solve_order": [1, 0, 3, 2], "total_llm_calls": 37, "wall_time_s": 187.14}}, "ts": 1776472998.880481}

@@ -1,0 +1,21 @@
+{"event": "game_start", "data": {"words": ["CATS", "PUMA", "REEBOK", "SPIDER", "SWEEP", "NIKE", "SUPER", "BAT", "CHICAGO", "CABARET", "MOP", "ADIDAS", "CAROUSEL", "DUST", "VACUUM", "IRON"], "categories": [{"group": "SNEAKER BRANDS", "level": 0, "members": ["ADIDAS", "NIKE", "PUMA", "REEBOK"]}, {"group": "MUSICALS BEGINNING WITH \u201cC\u201d", "level": 1, "members": ["CABARET", "CAROUSEL", "CATS", "CHICAGO"]}, {"group": "CLEANING VERBS", "level": 2, "members": ["DUST", "MOP", "SWEEP", "VACUUM"]}, {"group": "___ MAN SUPERHEROES", "level": 3, "members": ["BAT", "IRON", "SPIDER", "SUPER"]}]}, "ts": 1776468546.342634}
+{"event": "correct_guess", "data": {"guess": ["SWEEP", "VACUUM", "MOP", "DUST"], "proposed_category": "CLEANING VERBS", "actual_category": "CLEANING VERBS", "level": 2}, "ts": 1776468556.310276}
+{"event": "wrong_guess", "data": {"guess": ["BAT", "PUMA", "IRON", "REEBOK"], "category": "SNEAKER BRANDS", "strikes": 1}, "ts": 1776468568.6004622}
+{"event": "wrong_guess", "data": {"guess": ["CAROUSEL", "ADIDAS", "NIKE", "PUMA"], "category": "SNEAKER BRANDS", "strikes": 2}, "ts": 1776468582.6111329}
+{"event": "wrong_guess", "data": {"guess": ["CHICAGO", "CATS", "CABARET", "SPIDER"], "category": "MUSICALS BEGINNING WITH \"C\"", "strikes": 3}, "ts": 1776468594.8145752}
+{"event": "wrong_guess", "data": {"guess": ["CATS", "CABARET", "CHICAGO", "SPIDER"], "category": "MUSICALS_BEGINNING_WITH_OR_CONTAINING_THE_LETTER_C", "strikes": 4}, "ts": 1776468603.540051}
+{"event": "wrong_guess", "data": {"guess": ["REEBOK", "CAROUSEL", "CATS", "SPIDER"], "category": "SNEAKER BRANDS, ROLLER COASTERS, THEATRICAL PRODUCTIONS, ARACHNIDS", "strikes": 5}, "ts": 1776468617.2229419}
+{"event": "wrong_guess", "data": {"guess": ["ADIDAS", "BAT", "REEBOK", "SPIDER"], "category": "SPORTS BRANDS", "strikes": 6}, "ts": 1776468632.589314}
+{"event": "wrong_guess", "data": {"guess": ["BAT", "CATS", "PUMA", "SPIDER"], "category": "MUSICALS", "strikes": 7}, "ts": 1776468646.016489}
+{"event": "wrong_guess", "data": {"guess": ["REEBOK", "CATS", "CAROUSEL", "PUMA"], "category": "SNEAKER BRANDS", "strikes": 8}, "ts": 1776468662.102031}
+{"event": "wrong_guess", "data": {"guess": ["CATS", "CABARET", "CHICAGO", "SPIDER"], "category": "MUSICALS BEGINNING WITH \"C\"", "strikes": 9}, "ts": 1776468670.695523}
+{"event": "wrong_guess", "data": {"guess": ["CATS", "CABARET", "CHICAGO", "SPIDER"], "category": "MUSICALS_BEGINNING_WITH_\"C\"", "strikes": 10}, "ts": 1776468679.185039}
+{"event": "wrong_guess", "data": {"guess": ["CATS", "CABARET", "CHICAGO", "SPIDER"], "category": "MUSICALS_BEGINNING_WITH_\"C\"", "strikes": 11}, "ts": 1776468688.822495}
+{"event": "correct_guess", "data": {"guess": ["CABARET", "CHICAGO", "CATS", "CAROUSEL"], "proposed_category": "MUSICALS_BEGINNING_WITH_\"C\"", "actual_category": "MUSICALS BEGINNING WITH \u201cC\u201d", "level": 1}, "ts": 1776468704.077339}
+{"event": "wrong_guess", "data": {"guess": ["BAT", "ADIDAS", "IRON", "REEBOK"], "category": "SNEAKER BRANDS", "strikes": 12}, "ts": 1776468719.406956}
+{"event": "wrong_guess", "data": {"guess": ["BAT", "IRON", "PUMA", "REEBOK"], "category": "SNEAKER BRANDS", "strikes": 13}, "ts": 1776468727.938499}
+{"event": "wrong_guess", "data": {"guess": ["PUMA", "ADIDAS", "REEBOK", "BAT"], "category": "SNEAKER BRANDS", "strikes": 14}, "ts": 1776468743.505286}
+{"event": "wrong_guess", "data": {"guess": ["SPIDER", "ADIDAS", "IRON", "CAROUSEL"], "category": "SNEAKER BRANDS AND OTHER WORDS", "strikes": 15}, "ts": 1776468753.231607}
+{"event": "correct_guess", "data": {"guess": ["SUPER", "SPIDER", "IRON", "BAT"], "proposed_category": "MUSICALS BEGINNING WITH \"B\"", "actual_category": "___ MAN SUPERHEROES", "level": 3}, "ts": 1776468769.6612911}
+{"event": "correct_guess", "data": {"guess": ["ADIDAS", "NIKE", "REEBOK", "PUMA"], "proposed_category": "SNEAKER BRANDS", "actual_category": "SNEAKER BRANDS", "level": 0}, "ts": 1776468780.468268}
+{"event": "game_end", "data": {"solved": [true, true, true, true], "metrics": {"failed_guesses": 15, "hallucinated_words": [["CAROUSEL"]], "solve_order": [2, 1, 3, 0], "total_llm_calls": 31, "wall_time_s": 234.13}}, "ts": 1776468780.4684858}

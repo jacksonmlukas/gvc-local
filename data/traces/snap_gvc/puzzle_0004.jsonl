@@ -1,0 +1,19 @@
+{"event": "game_start", "data": {"words": ["DOWN", "TARTAR", "MAYO", "NETFLIX", "KETCHUP", "PRIME", "PLUM", "GREEN", "BLUE", "PEACOCK", "HULU", "SCARLET", "RELISH", "LOW", "MUSTARD", "GLUM"], "solver": "snap_gvc"}, "ts": 1776472431.542725}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776472431.54304}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["PEACOCK", "PLUM", "SCARLET", "BLUE"], "category": "BRIGHT COLORS"}, "ts": 1776472432.40692}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["GLUM", "DOWN", "LOW", "PEACOCK"], "category": "WORDS IMPLIED BY A NEGATIVE PREFIX"}, "ts": 1776472437.146104}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["HULU", "NETFLIX", "PRIME", "BLUE"], "category": "STREAMING_SERVICES"}, "ts": 1776472496.912917}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776472496.914407}
+{"event": "correct_guess", "data": {"phase": "snap", "guess": ["HULU", "NETFLIX", "PRIME", "PEACOCK"], "actual_category": "STREAMING SERVICES"}, "ts": 1776472501.230931}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776472501.231227}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["BLUE", "GREEN", "SCARLET", "PLUM"], "category": "SHADES OF BLUE"}, "ts": 1776472513.420767}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["MAYO", "RELISH", "MUSTARD", "TARTAR"], "category": "CONDIMENTS"}, "ts": 1776472565.647664}
+{"event": "wrong_guess", "data": {"phase": "conservative", "guess": ["SCARLET", "BLUE", "GLUM", "DOWN"], "category": "COLOURS, EMOTIONS, ORIENTATION, POSTURE"}, "ts": 1776472579.66154}
+{"event": "phase", "data": {"phase": "snap"}, "ts": 1776472579.662035}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["MAYO", "MUSTARD", "RELISH", "KETCHUP"], "reason": "Sauces from classic condiment platter"}, "ts": 1776472582.115617}
+{"event": "wrong_guess", "data": {"phase": "snap", "guess": ["BLUE", "GREEN", "KETCHUP", "MAYO"], "reason": "Condiment colors and types"}, "ts": 1776472596.449257}
+{"event": "correct_guess", "data": {"phase": "snap", "guess": ["DOWN", "GLUM", "LOW", "BLUE"], "actual_category": "SYNONYMS FOR SAD"}, "ts": 1776472604.0238311}
+{"event": "phase", "data": {"phase": "conservative"}, "ts": 1776472604.024199}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["GREEN", "MUSTARD", "PLUM", "SCARLET"], "actual_category": "CLUE CHARACTERS"}, "ts": 1776472617.151315}
+{"event": "correct_guess", "data": {"phase": "conservative", "guess": ["MAYO", "KETCHUP", "RELISH", "TARTAR"], "actual_category": "CONDIMENTS"}, "ts": 1776472624.576264}
+{"event": "game_end", "data": {"solved": [true, true, true, true], "metrics": {"failed_guesses": 8, "hallucinated_words": [], "solve_order": [0, 2, 3, 1], "total_llm_calls": 33, "wall_time_s": 193.03}}, "ts": 1776472624.576386}
