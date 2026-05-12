@@ -65,7 +65,9 @@ MODEL_MAP: dict[str, dict[str, str]] = {
 MODEL_CHOICES = list(MODEL_MAP["local"])
 
 
-def _resolve_endpoint(model_key: str, provider: str, base_url: str | None, model_override: str | None = None) -> EndpointConfig:
+def _resolve_endpoint(
+    model_key: str, provider: str, base_url: str | None, model_override: str | None = None
+) -> EndpointConfig:
     """Map a friendly model name + provider to an ``EndpointConfig``.
 
     If *model_override* is given, it bypasses the MODEL_MAP and creates an

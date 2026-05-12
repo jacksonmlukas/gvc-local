@@ -240,7 +240,8 @@ class GVCSolver(BaseSolver):
             if attempt > self.validator_bypass_after:
                 logger.info(
                     "[GVC] attempt %d > bypass threshold %d, skipping validator",
-                    attempt, self.validator_bypass_after,
+                    attempt,
+                    self.validator_bypass_after,
                 )
                 self._reset_guess_state()
                 return group, category
@@ -312,9 +313,7 @@ class GVCSolver(BaseSolver):
         if self._failed_pair_counts:
             # Identify word pairs that appeared together in 3+ failed guesses
             # — they probably don't belong in the same group
-            suspect_pairs = [
-                pair for pair, count in self._failed_pair_counts.items() if count >= 3
-            ]
+            suspect_pairs = [pair for pair, count in self._failed_pair_counts.items() if count >= 3]
             if suspect_pairs:
                 elim_lines = [
                     "- ELIMINATION HINT — These word pairs have appeared together "

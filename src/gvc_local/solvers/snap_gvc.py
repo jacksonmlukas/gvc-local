@@ -153,10 +153,11 @@ class SnapGVCSolver(BaseSolver):
                     cat_idx = game._og_groups.index(result)
                     metrics.record_solve(cat_idx)
                     logger.info(
-                        "[SwapEngine] SOLVED via swap: %s -> %s "
-                        "(swapped %s for %s)",
-                        candidate, result.group,
-                        upper_miss[swap_out_idx], swap_in,
+                        "[SwapEngine] SOLVED via swap: %s -> %s (swapped %s for %s)",
+                        candidate,
+                        result.group,
+                        upper_miss[swap_out_idx],
+                        swap_in,
                     )
                     if recorder:
                         recorder.record(
@@ -276,13 +277,17 @@ class SnapGVCSolver(BaseSolver):
                     if game.last_one_away:
                         self.gvc.record_near_miss(guess_words)
                         logger.info(
-                            "[SnapGVC] CONSERVATIVE ONE AWAY: %s — "
-                            "activating swap engine", guess_words
+                            "[SnapGVC] CONSERVATIVE ONE AWAY: %s — activating swap engine",
+                            guess_words,
                         )
                         # Deterministic swap: try all single-word swaps
                         swap_solved = self._try_all_swaps(
-                            guess_words, remaining, game,
-                            self._sorted_failed, metrics, recorder,
+                            guess_words,
+                            remaining,
+                            game,
+                            self._sorted_failed,
+                            metrics,
+                            recorder,
                         )
                         if swap_solved:
                             wrong_count = 0
@@ -386,12 +391,15 @@ class SnapGVCSolver(BaseSolver):
                     if game.last_one_away:
                         self.gvc.record_near_miss(guess_words)
                         logger.info(
-                            "[SnapGVC] SNAP ONE AWAY: %s — "
-                            "activating swap engine", guess_words
+                            "[SnapGVC] SNAP ONE AWAY: %s — activating swap engine", guess_words
                         )
                         swap_solved = self._try_all_swaps(
-                            guess_words, remaining, game,
-                            self._sorted_failed, metrics, recorder,
+                            guess_words,
+                            remaining,
+                            game,
+                            self._sorted_failed,
+                            metrics,
+                            recorder,
                         )
                         if swap_solved:
                             snap_correct = True  # switch back to conservative

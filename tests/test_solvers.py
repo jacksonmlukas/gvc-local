@@ -50,7 +50,9 @@ class TestGroundingCheck:
     def test_valid_guess(self):
         ok, err = _grounding_check(
             ["APPLE", "BANANA", "CHERRY", "DATE"],
-            self.BOARD, 4, [],
+            self.BOARD,
+            4,
+            [],
         )
         assert ok is True
         assert err == ""
@@ -58,7 +60,9 @@ class TestGroundingCheck:
     def test_missing_words(self):
         ok, err = _grounding_check(
             ["APPLE", "BANANA", "CHERRY", "GRAPE"],
-            self.BOARD, 4, [],
+            self.BOARD,
+            4,
+            [],
         )
         assert ok is False
         assert "GRAPE" in err
@@ -66,7 +70,9 @@ class TestGroundingCheck:
     def test_wrong_group_size(self):
         ok, err = _grounding_check(
             ["APPLE", "BANANA", "CHERRY"],
-            self.BOARD, 4, [],
+            self.BOARD,
+            4,
+            [],
         )
         assert ok is False
         assert "Expected 4" in err
@@ -75,7 +81,9 @@ class TestGroundingCheck:
         failed = [["APPLE", "BANANA", "CHERRY", "DATE"]]
         ok, err = _grounding_check(
             ["APPLE", "BANANA", "CHERRY", "DATE"],
-            self.BOARD, 4, failed,
+            self.BOARD,
+            4,
+            failed,
         )
         assert ok is False
         assert "repeats" in err
@@ -84,7 +92,9 @@ class TestGroundingCheck:
         failed = [["APPLE", "BANANA", "CHERRY", "DATE"]]
         ok, err = _grounding_check(
             ["DATE", "CHERRY", "BANANA", "APPLE"],
-            self.BOARD, 4, failed,
+            self.BOARD,
+            4,
+            failed,
         )
         assert ok is False
         assert "repeats" in err
@@ -96,8 +106,11 @@ class TestGroundingCheck:
         failed = [["APPLE", "BANANA", "CHERRY", "DATE"]]
         ok, err = _grounding_check(
             ["APPLE", "BANANA", "CHERRY", "RED"],  # 3/4 overlap
-            self.BOARD, 4, failed,
-            fuzzy_dedup=True, max_overlap=3,
+            self.BOARD,
+            4,
+            failed,
+            fuzzy_dedup=True,
+            max_overlap=3,
         )
         assert ok is False
         assert "shares 3/4" in err
@@ -107,8 +120,11 @@ class TestGroundingCheck:
         failed = [["APPLE", "BANANA", "CHERRY", "DATE"]]
         ok, err = _grounding_check(
             ["APPLE", "BANANA", "RED", "BLUE"],  # 2/4 overlap
-            self.BOARD, 4, failed,
-            fuzzy_dedup=True, max_overlap=3,
+            self.BOARD,
+            4,
+            failed,
+            fuzzy_dedup=True,
+            max_overlap=3,
         )
         assert ok is True
 
@@ -117,7 +133,9 @@ class TestGroundingCheck:
         failed = [["APPLE", "BANANA", "CHERRY", "DATE"]]
         ok, err = _grounding_check(
             ["APPLE", "BANANA", "CHERRY", "RED"],
-            self.BOARD, 4, failed,
+            self.BOARD,
+            4,
+            failed,
             fuzzy_dedup=False,
         )
         assert ok is True
@@ -127,8 +145,11 @@ class TestGroundingCheck:
         failed = [["APPLE", "BANANA", "CHERRY", "DATE"]]
         ok, err = _grounding_check(
             ["APPLE", "BANANA", "RED", "BLUE"],  # 2/4 overlap
-            self.BOARD, 4, failed,
-            fuzzy_dedup=True, max_overlap=2,
+            self.BOARD,
+            4,
+            failed,
+            fuzzy_dedup=True,
+            max_overlap=2,
         )
         assert ok is False
         assert "shares 2/4" in err
@@ -136,7 +157,9 @@ class TestGroundingCheck:
     def test_case_insensitive(self):
         ok, err = _grounding_check(
             ["apple", "banana", "cherry", "date"],
-            ["APPLE", "BANANA", "CHERRY", "DATE"], 4, [],
+            ["APPLE", "BANANA", "CHERRY", "DATE"],
+            4,
+            [],
         )
         assert ok is True
 
@@ -200,6 +223,7 @@ class TestTraceRecorder:
         rec.close()
 
         import json
+
         lines = path.read_text().strip().split("\n")
         assert len(lines) == 1
         obj = json.loads(lines[0])

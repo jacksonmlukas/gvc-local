@@ -74,10 +74,22 @@ class TestConnections:
         game = _make_game()
         words = game.all_words
         assert set(words) == {
-            "APPLE", "BANANA", "CHERRY", "DATE",
-            "RED", "BLUE", "GREEN", "YELLOW",
-            "CAT", "DOG", "FISH", "BIRD",
-            "ONE", "TWO", "THREE", "FOUR",
+            "APPLE",
+            "BANANA",
+            "CHERRY",
+            "DATE",
+            "RED",
+            "BLUE",
+            "GREEN",
+            "YELLOW",
+            "CAT",
+            "DOG",
+            "FISH",
+            "BIRD",
+            "ONE",
+            "TWO",
+            "THREE",
+            "FOUR",
         }
 
     def test_correct_guess_removes_category(self):
@@ -140,9 +152,12 @@ class TestConnections:
 
     def test_invalid_group_size_raises(self):
         with pytest.raises(ValueError, match="exactly"):
-            Connections(categories=[
-                Category(level=1, group="BAD", members=["A", "B", "C"]),
-            ], group_size=4)
+            Connections(
+                categories=[
+                    Category(level=1, group="BAD", members=["A", "B", "C"]),
+                ],
+                group_size=4,
+            )
 
 
 # ---------------------------------------------------------------------------
