@@ -2,6 +2,28 @@
 
 All notable changes to GVC-Local. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); the project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] — 2026-05-30
+
+Closes M5: stratified eval harness with bootstrapped 95% CIs.
+
+### Added
+- `gvc_local.eval.tagger`: heuristic puzzle category classifier (keyword + structural rules → 5 strata: wordplay, silent-letter, tag-fillin, cultural, category). Tagged the full 1,078-puzzle NYT Connections corpus.
+- `gvc_local.eval.aggregate`: CLI that joins solver result JSONL with tagged puzzles, computes per-stratum + overall bootstrap CIs at any resample count, emits markdown tables for the README.
+- `data/puzzles/tagged_connections.json`: full 1,078-puzzle dataset with `category` labels.
+- 50 new unit tests across `test_eval_harness.py`, `test_tagger.py`, `test_aggregate.py` covering reproducibility, CI bounds, NaN handling, schema compatibility, and tie-breaking edge cases.
+
+### Changed
+- README headline results table now reports bootstrap 95% CIs at 5,000 resamples. Per-stratum breakdown for the LoRA-finetuned solver surfaces the previously-hidden 0% solve rate on wordplay and cultural strata.
+- `snap_gvc` headline updated from 60% (v1 single-point, rate-limit-noted) to 40.0% [10.0, 70.0] (v3 clean rerun with CIs). The v0.1 footnote about rate-limit-affected numbers is no longer needed — uncertainty is now in the CI.
+
+### Methodology notes
+- Strata distribution across the corpus: 46% category (catch-all), 30% tag-fillin, 12% cultural, 10% wordplay, 2% silent-letter.
+- CIs use percentile bootstrap (numpy `quantile` over resample means). 5,000 resamples in headline; reproducible via fixed seed.
+
+### Known issues
+- Tagger is heuristic — 46% of puzzles fall in catch-all. LLM-as-judge classifier queued for a future minor release.
+- No paired significance tests between solvers yet — queued.
+
 ## [0.1.0] — 2026-05
 
 First tagged release. Open-weight extension of the ACL 2025 REALM paper *"Snap Out of It: A Dual-Process Approach to Mitigating Overthinking in Language Model Reasoning"* (Pandian et al.).

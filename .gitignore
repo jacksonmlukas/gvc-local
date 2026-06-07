@@ -25,6 +25,8 @@ dist/
 *.sqlite
 *.db
 results/
+# Track curated release-tagged result summaries (e.g. v0.2.0 stratified table)
+!results/m5/
 checkpoints/
 *.safetensors
 *.bin
