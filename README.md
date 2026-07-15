@@ -4,6 +4,8 @@ Extending the [ACL 2025 REALM paper](https://aclanthology.org/2025.realm-1.16/) 
 
 The original paper reports headline numbers on GPT-4o and GPT-4o-mini but leaves open-model rows in Table 1 empty. This project fills them in and asks: does the dual-process escape hatch generalize to 8B open models, and can LoRA fine-tuning on puzzle data close the gap?
 
+**Follow-up:** [connections-rl](https://github.com/jacksonmlukas/connections-rl) post-trains a small open model with GRPO (verifiable-reward RL) on this repo's puzzle data and measures it against the multi-agent baselines below.
+
 ## Results
 
 Evaluated on NYT Connections puzzles using Llama 3.1 8B Instruct. v0.2.0 introduces stratified sampling over puzzle categories and bootstrapped 95% CIs on every reported metric — single-point estimates from v0.1 are deprecated in favor of the framework below.
